@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+
+    <link rel="stylesheet"
+          href="androidstudio.css">
+	<script src="highlight.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.js"></script>
+</head>
+<body>
+<pre><code class="json">
+[
+  {
+    "title": "apples",
+    "count": [12000, 20000],
+    "description": {"text": "...", "sensitive": false}
+  },
+  {
+    "title": "oranges",
+    "count": [17500, null],
+    "description": {"text": "...", "sensitive": false}
+  }
+]
+
+</code></pre>
+<pre>
+
+    <pre><code class="sql">
+select * from user;
+</code></pre>
+<pre>
+<textarea id="code" style="width:500px;height:500px;background-color:#333;color:#fff;">
+
+</textarea>
+    </pre>
+<script>
+    var div="";
+
+    $('#code').keyup(function(e){
+        div=$(this).val();
+        console.log(div);
+        $('.json').html(div);
+        $('.json').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+
+    })
+
+
+//    hljs.configure({useBR: true});
+//
+//    $('.sql').each(function(i, block) {
+//        hljs.highlightBlock(block);
+//    });
+
+
+
+        // ...其他选项没有更改
+
+
+
+
+    hljs.initHighlighting();
+</script>
+
+
+</body>
+</html>

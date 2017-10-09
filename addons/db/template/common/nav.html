@@ -1,0 +1,13 @@
+<div class="layui-tab layui-tab-brief width" lay-filter="docDemoTabBrief">
+    <ul class="layui-tab-title width">
+        <a href="{{ _G['APP_URL'] }}?m=db&c=index&a=index"> <li  {% if  _GPC['c']=='index' and _GPC['a']=='index' %} class="layui-this" {% endif %}>图表列表</li></a>
+        <a href="{{ _G['APP_URL'] }}?m=db&c=columnar&a=index"> <li  {% if _GPC['c']=='columnar' and _GPC['a']=='index' %} class="layui-this" {% endif %}>柱状图</li></a>
+
+
+        <li>统计图</li>
+
+
+        <a href="{{ _G['APP_URL'] }}?m=db&c=index&a=setting"><li {% if   _GPC['c']=='index' and _GPC['a']=='setting' %} class="layui-this" {% endif %}>配置</li></a>
+    </ul>
+    <div class="layui-tab-content"></div>
+</div>
