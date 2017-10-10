@@ -1,16 +1,18 @@
 <?php
-session_start();
+
+//session_start();
+
 /**
  * lnmpbao - A PHP Framework For Web Artisans
  *
  * @package  clafbaby
  * @author   牛宝宝技术团队  <baobao@clafbaby.com>
  */
+
 header("Content-type:text/html;charset=utf-8");
 $_G = $_GPC = array();
 //合并get  与post请求
 $_GPC=array_merge($_GET,$_POST);
-
 
 
 //载入composer
@@ -62,7 +64,6 @@ define('APP', NIUBAOBAO . '/'.$MODULE_NAME.'/');
 define('MODULE', $MODULE_NAME);//定义当前模块名
 define('ATTACHMENT_ROOT', NIUBAOBAO .'/'.$_G['config']['ATTACHMENT'].'/');//附件地址绝对路径
 
-
 if($_G['config']['HTTP']){
     if(!empty($_G['config']['MASTER'])){
         define('APP_URL',$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.$_G['config']['MASTER'].'/index.php');
@@ -89,7 +90,7 @@ $_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/attac
 //此函数加载需要上配置文件之下
 include_once CORE .'functions/function.php';
 
-//设置默认市区
+//设置默认时区
 date_default_timezone_set(\Framework\library\conf::get('TIMEZONE','system'));
 
 
@@ -108,12 +109,9 @@ if(DEBUG && PHP_SAPI != 'cli') {
 }
 
 
-//开始跑框架
-if(PHP_SAPI == 'cli') {//客户端模式
-    \niubaobao_cli::run();
-} else {
 
-    //开始跑框架
-    \niubaobao::run();
-}
+//开始跑框架
+$niubaobao=new \niubaobao;
+$niubaobao->run();
+
 

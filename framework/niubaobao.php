@@ -25,6 +25,9 @@ class niubaobao
      */
     public $assign;
 
+    public $ctrlFile;
+    public $ctrlClass;
+    public $action;
 
     /**
      * 自动加载类
@@ -51,13 +54,19 @@ class niubaobao
      * 1.加载route解析当前URL
      * 2.找到对应的控制以及方法,并运行
      */
-    public static function run()
+    public  function run()
     {
         global $_G;
         $request = new \Framework\library\route();
 
         \Framework\library\log::init();
 
+        if($request->route['PATH_INFO']==2){
+            $this->pathTwo($request);
+        }else{
+            $this->pathOne($request);
+
+        }
 
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if (@$_GET['m'] !='web' && @isset($_GET['m'])) {
@@ -68,29 +77,23 @@ class niubaobao
 
         }
 
-        $ctrlClass = '\\' . $MODULE_NAME . '\controller\\' . $request->ctrl ;
-
-        $action = $request->action;
-        //系统默认目录
-
-        $ctrlFile = APP . 'controller/' . $request->ctrl . '.php';
 
 
 
-        if (is_file($ctrlFile)) {
-            include $ctrlFile;
+        if (is_file($this->ctrlFile)) {
+            include $this->ctrlFile;
 
         } else {
 
             if (DEBUG) {
-                throw new Exception($ctrlClass . '是一个不存在的控制器');
+                throw new Exception($this->ctrlClass . '是一个不存在的控制器');
             } else {
                 show404();
             }
         }
 
-        $ctrl = new $ctrlClass();
-
+        $ctrl = new $this->ctrlClass();
+        $action = $this->action;
         //如果开启restful,那么加载方法时带上请求类型
         if (\Framework\library\conf::get('OPEN_RESTFUL', 'system')) {
             $action = strtolower($request->method()) . ucfirst($action);
@@ -98,6 +101,40 @@ class niubaobao
 
         $ctrl->$action();
     }
+
+    /**
+     * pathinfo  1 默认模式  使用？ & 带参数
+     */
+
+    public  function pathOne($request){
+        global $_G;
+        //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
+        if (@$_GET['m'] !=$_G['config']['MASTER'] && @isset($_GET['m'])) {
+            $MODULE_NAME = 'addons\\'.$_GET['m'];
+
+        } else {
+            $MODULE_NAME = $_G['config']['MASTER'];
+
+        }
+
+        $this->ctrlClass = '\\' . $MODULE_NAME . '\controller\\' . $request->ctrl ;
+
+        $this->action = $request->action;
+        //系统默认目录
+
+        $this->ctrlFile = APP . 'controller/' . $request->ctrl . '.php';
+
+    }
+
+    /**
+     * pathinfo  2 伪静态模式  使用／带参数
+     */
+
+    public  function pathTwo($request){
+
+
+    }
+
 
 
     /**

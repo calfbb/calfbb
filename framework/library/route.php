@@ -9,12 +9,14 @@ class route
 {
     public $ctrl;
     public $action;
+    public $module;
     public $path;
     public $route;
 
     public function __construct()
     {
         $route = conf::all('route');
+        $this->route=$route;
         //如果路由是第一种模式
         if($route['PATH_INFO']==2){
             $this->pathinfoTwo($route);
