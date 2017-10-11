@@ -9,12 +9,16 @@ class route
 {
     public $ctrl;
     public $action;
+    public $module;
     public $path;
     public $route;
+    public $addons;
 
     public function __construct()
     {
         $route = conf::all('route');
+        $this->route=$route;
+        $this->addons=$route['DEFAULT_ADDONS'];
         //如果路由是第一种模式
         if($route['PATH_INFO']==2){
             $this->pathinfoTwo($route);
@@ -36,7 +40,7 @@ class route
                 $this->ctrl=$_GPC['c'];
                 $this->action=$_GPC['a'];
             }else{
-                $this->module=$_G['config']['MASTER'];
+                $this->module=conf::get('DEFAULT_MODULE', 'route');
                 $this->ctrl = conf::get('DEFAULT_CTRL', 'route');
                 $this->action = conf::get('DEFAULT_ACTION', 'route');
                // throw new \Exception('URL参数错误'.$_SERVER['QUERY_STRING'] );
@@ -47,39 +51,49 @@ class route
 
     public function pathinfoTwo($route)
     {
+        global $_GPC;
+
         if (isset($_SERVER['REQUEST_URI'])) {
             $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
 
             //丢掉?以及后面的参数
-            $path = explode('?', $pathStr);
+           $path = explode('?', $pathStr);
 
             //去掉多余的分隔符
             $path = explode('/', trim($path[0], '/'));
 
             if (isset($path[0]) && $path[0]) {
-                $this->ctrl = $path[0];
+                $this->module = $path[0];
+            } else {
+                $this->module = $route['DEFAULT_MODULE'];
+            }
+            unset($path[0]);
+            if (isset($path[1]) && $path[1]) {
+                $this->ctrl = $path[1];
             } else {
                 $this->ctrl = $route['DEFAULT_CTRL'];
             }
 
-            unset($path[0]);
+
+            unset($path[1]);
+
             //检测是否包含路由缩写
             if (isset($route['ROUTE'][$this->ctrl])) {
-                $this->action = $route['ROUTE'][$this->ctrl][1];
-                $this->ctrl = $route['ROUTE'][$this->ctrl][0];
+                $this->action = $route['ROUTE'][$this->ctrl][2];
+                $this->ctrl = $route['ROUTE'][$this->ctrl][1];
             } else {
-                if (isset($path[1]) && $path[1]) {
-                    $have = strstr($path[1], '?', true);
+                if (isset($path[2]) && $path[2]) {
+                    $have = strstr($path[2], '?', true);
                     if ($have) {
                         $this->action = $have;
                     } else {
-                        $this->action = $path[1];
+                        $this->action = $path[2];
                     }
 
                 } else {
                     $this->action = $route['DEFAULT_ACTION'];
                 }
-                unset($path[1]);
+                unset($path[2]);
             }
 
             $this->path = array_merge($path);
@@ -89,11 +103,13 @@ class route
             while ($i < $pathLenth) {
                 if (isset($this->path[$i + 1])) {
                     $_GET[$this->path[$i]] = $this->path[$i + 1];
+                    $_GPC[$this->path[$i]]=$this->path[$i + 1];
                 }
                 $i = $i + 2;
             }
-        } else {
 
+        } else {
+            $this->module = conf::get('DEFAULT_MODULE', 'route');
             $this->ctrl = conf::get('DEFAULT_CTRL', 'route');
             $this->action = conf::get('DEFAULT_ACTION', 'route');
         }
