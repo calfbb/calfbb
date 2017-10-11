@@ -5,8 +5,8 @@
 namespace App\controller;
 
 use  Framework\library\view;
-
-class Index
+use \App\model\UserModel;
+class Index extends UserModel
 {
    use view;
 
@@ -14,7 +14,8 @@ class Index
     public function index()
     {
         global $_G;
-
+        $test=$this->pdoTest();
+        p($test);
         $this->display('index/index.html');
 
     }

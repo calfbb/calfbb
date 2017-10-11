@@ -33,19 +33,7 @@ function show_json($array){
     echo json_encode($array);exit;
 }
 
-function debug($var)
-{
-    if (function_exists('dump')) {
-        array_walk($var, function ($v) {
-            dump($v);
-        });
-    } else {
-        array_walk($var, function ($v) {
-            print_r($v);
-        });
-    }
-    exit();
-}
+
 
 function is_cli()
 {

@@ -47,7 +47,7 @@ spl_autoload_register('\niubaobao::load');
 \Framework\library\conf::G('config');
 \Framework\library\conf::G('database');
 
-//如果是多模块,可以通过动态设置module的形式,动态条用不同模块
+//如果是多模块,可以通过动态设置module的形式,动态调用不同模块
 if (@isset($_GPC['m'])) {
     $MODULE_NAME = $_G['config']['ADDONS'].'/'.$_GPC['m'];
     $MODULE=$_GPC['m'];
