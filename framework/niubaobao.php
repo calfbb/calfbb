@@ -24,7 +24,7 @@ class niubaobao
      * 视图赋值
      */
     public $assign;
-
+    public $module;
     public $ctrlFile;
     public $ctrlClass;
     public $action;
@@ -79,9 +79,9 @@ class niubaobao
 
 
 
-
         if (is_file($this->ctrlFile)) {
             include $this->ctrlFile;
+
 
         } else {
 
@@ -91,8 +91,8 @@ class niubaobao
                 show404();
             }
         }
-
         $ctrl = new $this->ctrlClass();
+
         $action = $this->action;
         //如果开启restful,那么加载方法时带上请求类型
         if (\Framework\library\conf::get('OPEN_RESTFUL', 'system')) {
@@ -133,6 +133,14 @@ class niubaobao
 
     public  function pathTwo($request){
 
+        $MODULE_NAME = $request->module;
+
+        $this->ctrlClass = '\\' . $MODULE_NAME . '\controller\\' . $request->ctrl ;
+
+        $this->action = $request->action;
+        //系统默认目录
+
+        $this->ctrlFile = APP . 'controller/' . $request->ctrl . '.php';
 
     }
 
