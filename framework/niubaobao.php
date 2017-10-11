@@ -69,13 +69,13 @@ class niubaobao
         }
 
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
-        if (@$_GET['m'] !='web' && @isset($_GET['m'])) {
-            $MODULE_NAME = 'addons\\'.$_GET['m'];
-
-        } else {
-            $MODULE_NAME = $_G['config']['MASTER'];
-
-        }
+//        if (@$_GET['m'] !='web' && @isset($_GET['m'])) {
+//            $MODULE_NAME = 'addons\\'.$_GET['m'];
+//
+//        } else {
+//            $MODULE_NAME = $_G['config']['MASTER'];
+//
+//        }
 
 
 
@@ -108,6 +108,7 @@ class niubaobao
 
     public  function pathOne($request){
         global $_G;
+
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if (@$_GET['m'] !=$_G['config']['MASTER'] && @isset($_GET['m'])) {
             $MODULE_NAME = 'addons\\'.$_GET['m'];
