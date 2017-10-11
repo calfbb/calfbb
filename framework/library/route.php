@@ -67,6 +67,8 @@ class route
             } else {
                 $this->module = $route['DEFAULT_MODULE'];
             }
+            $_GET['m']=$this->module;
+            $_GPC['m']=$this->module;
             unset($path[0]);
             if (isset($path[1]) && $path[1]) {
                 $this->ctrl = $path[1];
@@ -75,10 +77,12 @@ class route
             }
 
 
+            $_GET['c']=$this->ctrl;
+            $_GPC['c']=$this->ctrl;
             unset($path[1]);
 
             //检测是否包含路由缩写
-            if (isset($route['ROUTE'][$this->ctrl])) {
+            if (@isset($route['ROUTE'][$this->ctrl])) {
                 $this->action = $route['ROUTE'][$this->ctrl][2];
                 $this->ctrl = $route['ROUTE'][$this->ctrl][1];
             } else {
@@ -94,6 +98,9 @@ class route
                     $this->action = $route['DEFAULT_ACTION'];
                 }
                 unset($path[2]);
+                $_GET['a']=$this->action;
+                $_GPC['a']=$this->action;
+
             }
 
             $this->path = array_merge($path);
@@ -109,10 +116,12 @@ class route
             }
 
         } else {
+
             $this->module = conf::get('DEFAULT_MODULE', 'route');
             $this->ctrl = conf::get('DEFAULT_CTRL', 'route');
             $this->action = conf::get('DEFAULT_ACTION', 'route');
         }
+
     }
     public function urlVar($num, $default = false)
     {

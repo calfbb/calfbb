@@ -16,18 +16,14 @@
 
 class niubaobao
 {
-    /**
-     * model用于存放已经加载的model模型,下次加载时直接返回
-     */
-    public $model;
-    /**
-     * 视图赋值
-     */
-    public $assign;
-    public $module;
-    public $ctrlFile;
-    public $ctrlClass;
-    public $action;
+
+    public $model;/** model用于存放已经加载的model模型,下次加载时直接返回*/
+    public $assign;/** 视图赋值*/
+    public $module;/** 访问模块*/
+    public $module_name;/** 访问模块名*/
+    public $ctrlFile;/** 访问文件路径*/
+    public $ctrlClass;/** 访问类*/
+    public $action;/** 访问方法*/
 
     /**
      * 自动加载类
@@ -59,25 +55,14 @@ class niubaobao
         global $_G;
         $request = new \Framework\library\route();
 
-        \Framework\library\log::init();
-
         if($request->route['PATH_INFO']==2){
             $this->pathTwo($request);
         }else{
             $this->pathOne($request);
 
         }
-
-        //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
-//        if (@$_GET['m'] !='web' && @isset($_GET['m'])) {
-//            $MODULE_NAME = 'addons\\'.$_GET['m'];
-//
-//        } else {
-//            $MODULE_NAME = $_G['config']['MASTER'];
-//
-//        }
-
-
+        $this->globalDefined();
+        \Framework\library\log::init();
 
         if (is_file($this->ctrlFile)) {
             include $this->ctrlFile;
@@ -110,20 +95,22 @@ class niubaobao
         global $_G;
 
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
-        if (@$_GET['m'] !=$_G['config']['MASTER'] && @isset($_GET['m'])) {
-            $MODULE_NAME = 'addons\\'.$_GET['m'];
+        if (@$_GET['m'] !=$request->route['DEFAULT_MODULE'] && @isset($_GET['m'])) {
+            $this->module_name = $request->route['DEFAULT_ADDONS'].'\\'.$_GET['m'];
 
         } else {
-            $MODULE_NAME = $_G['config']['MASTER'];
+
+            $this->module_name = $request->module;
 
         }
 
-        $this->ctrlClass = '\\' . $MODULE_NAME . '\controller\\' . $request->ctrl ;
+        $this->ctrlClass = '\\' . $this->module_name . '\controller\\' . ucwords($request->ctrl) ;
 
         $this->action = $request->action;
         //系统默认目录
 
-        $this->ctrlFile = APP . 'controller/' . $request->ctrl . '.php';
+         $this->ctrlFile = NIUBAOBAO . '/'.$this->module_name.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
+
 
     }
 
@@ -133,14 +120,25 @@ class niubaobao
 
     public  function pathTwo($request){
 
-        $MODULE_NAME = $request->module;
+        //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
+        if ($request->module != $request->route['DEFAULT_MODULE']) {
+            $this->module_name = $request->route['DEFAULT_ADDONS'].'\\'.$request->module;
 
-        $this->ctrlClass = '\\' . $MODULE_NAME . '\controller\\' . $request->ctrl ;
+        } else {
+
+            $this->module_name = $request->module;
+
+        }
+
+
+
+        $this->ctrlClass = '\\' . $this->module_name . '\controller\\' . ucwords($request->ctrl) ;
 
         $this->action = $request->action;
         //系统默认目录
 
-        $this->ctrlFile = APP . 'controller/' . $request->ctrl . '.php';
+        $this->ctrlFile =NIUBAOBAO . '/'.$this->module_name.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
+
 
     }
 
@@ -163,6 +161,38 @@ class niubaobao
             }
 
 
+    }
+
+
+    public function globalDefined(){
+        global $_G;
+         define('ATTACHMENT_ROOT', NIUBAOBAO .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径
+         define('APP', NIUBAOBAO . '/'.$this->module_name.'/');//定义当前模块绝对路径
+         define('MODULE', $this->module_name);//定义当前模块名
+
+        if($_G['config']['HTTP']){
+            if(!empty($_G['config']['MASTER'])){
+                define('APP_URL',$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].$this->module.'/index.php');
+
+            }else{
+                define('APP_URL',$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/index.php');
+
+            }
+        }else{
+            define('APP_URL','./index.php');
+        }
+
+        $_G['APP_URL']=APP_URL;
+        if(!empty($_G['config']['MASTER'])){
+            $_G['APP']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.$this->module;
+        }else{
+            $_G['APP']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/';
+        }
+
+        $_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.\Framework\library\conf::get('attachdir', 'file');
+
+//此函数加载需要上配置文件之下
+        include_once CORE .'functions/function.php';
     }
 
 }

@@ -50,45 +50,17 @@ spl_autoload_register('\niubaobao::load');
 \Framework\library\conf::G('database');
 
 //如果是多模块,可以通过动态设置module的形式,动态调用不同模块
-if (@isset($_GPC['m'])) {
-    $MODULE_NAME = $_G['config']['ADDONS'].'/'.$_GPC['m'];
-    $MODULE=$_GPC['m'];
+//if (@isset($_GPC['m'])) {
+//    $MODULE_NAME = $_G['config']['ADDONS'].'/'.$_GPC['m'];
+//    $MODULE=$_GPC['m'];
+//
+//} else {
+//    $MODULE_NAME = $_G['config']['MASTER'];
+//    $MODULE=$_G['config']['MASTER'];
+//
+//}
 
-} else {
-    $MODULE_NAME = $_G['config']['MASTER'];
-    $MODULE=$_G['config']['MASTER'];
 
-}
-
-define('APP', NIUBAOBAO . '/'.$MODULE_NAME.'/');
-define('MODULE', $MODULE_NAME);//定义当前模块名
-define('ATTACHMENT_ROOT', NIUBAOBAO .'/'.$_G['config']['ATTACHMENT'].'/');//附件地址绝对路径
-
-if($_G['config']['HTTP']){
-    if(!empty($_G['config']['MASTER'])){
-        define('APP_URL',$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.$_G['config']['MASTER'].'/index.php');
-
-    }else{
-        define('APP_URL',$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/index.php');
-
-    }
-}else{
-    define('APP_URL','./index.php');
-}
-
-$_G['APP_URL']=APP_URL;
-if(!empty($_G['config']['MASTER'])){
-    $_G['APP']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.$_G['config']['MASTER'].'/';
-    $_G['APP']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.$_G['config']['MASTER'].'/';
-}else{
-    $_G['APP']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/';
-    $_G['APP']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/';
-}
-
-$_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/attachment/';
-
-//此函数加载需要上配置文件之下
-include_once CORE .'functions/function.php';
 
 //设置默认时区
 date_default_timezone_set(\Framework\library\conf::get('TIMEZONE','system'));
@@ -113,5 +85,7 @@ if(DEBUG && PHP_SAPI != 'cli') {
 //开始跑框架
 $niubaobao=new \niubaobao;
 $niubaobao->run();
+
+
 
 

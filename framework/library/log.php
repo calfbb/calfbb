@@ -20,6 +20,7 @@ class log
             $type = conf::get('LOG_TYPE', 'log');
 
             $class = '\\Framework\\library\\lib\\log\\' . $type;
+
             self::$class = new $class();
         }
     }
