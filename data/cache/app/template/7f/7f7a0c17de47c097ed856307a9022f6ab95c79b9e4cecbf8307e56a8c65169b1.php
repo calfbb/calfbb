@@ -26,7 +26,7 @@ class __TwigTemplate_52a24a674a26b63c214cf406c1ed8b84bd269263cfdf090eee4e5b222d6
     <title>Document</title>
 </head>
 <body>
-1232
+hello word;
 </body>
 </html>";
     }
@@ -61,7 +61,7 @@ class __TwigTemplate_52a24a674a26b63c214cf406c1ed8b84bd269263cfdf090eee4e5b222d6
     <title>Document</title>
 </head>
 <body>
-1232
+hello word;
 </body>
 </html>", "index/index.html", "/data/test/calfbb/app/template/index/index.html");
     }

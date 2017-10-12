@@ -1,6 +1,6 @@
 <?php
 
-//session_start();
+session_start();
 
 /**
  * lnmpbao - A PHP Framework For Web Artisans
@@ -65,17 +65,16 @@ spl_autoload_register('\niubaobao::load');
 //设置默认时区
 date_default_timezone_set(\Framework\library\conf::get('TIMEZONE','system'));
 
-
 //错误提示
 if(DEBUG && PHP_SAPI != 'cli') {
     //打开PHP的错误显示
     ini_set('display_errors',true);
-    //载入友好的错误显示类
-    $whoops = new \Whoops\Run;
-    $errorPage = new \Whoops\Handler\PrettyPageHandler;
-    $errorPage->setPageTitle("出大事啦!!!");
-    $whoops->pushHandler($errorPage);
-    $whoops->register();
+    //载入友好的错误显示类  mac 下开发显示有问题，故不采用此模块
+//    $whoops = new \Whoops\Run;
+//    $errorPage = new \Whoops\Handler\PrettyPageHandler;
+//    $errorPage->setPageTitle("出大事啦!!!");
+//    $whoops->pushHandler($errorPage);
+//    $whoops->register();
 } else {
     ini_set('display_errors',false);
 }

@@ -35,16 +35,11 @@ class route
         if (isset($_SERVER['QUERY_STRING'])) {
 
             global $_GPC;
-            if(isset($_GPC['m']) && isset($_GPC['c']) && isset($_GPC['a']) ){
-                $this->module=$_GPC['m'];
-                $this->ctrl=$_GPC['c'];
-                $this->action=$_GPC['a'];
-            }else{
-                $this->module=conf::get('DEFAULT_MODULE', 'route');
-                $this->ctrl = conf::get('DEFAULT_CTRL', 'route');
-                $this->action = conf::get('DEFAULT_ACTION', 'route');
-               // throw new \Exception('URL参数错误'.$_SERVER['QUERY_STRING'] );
-            }
+            $this->module=isset($_GPC['m']) ? $_GPC['m'] : conf::get('DEFAULT_MODULE', 'route');
+            $this->ctrl=isset($_GPC['c']) ?  $_GPC['c'] : conf::get('DEFAULT_CTRL', 'route');
+            $this->action=isset($_GPC['a']) ? $_GPC['a'] : conf::get('DEFAULT_ACTION', 'route');
+
+
 
         }
     }

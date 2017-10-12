@@ -14,9 +14,8 @@ class Index extends UserModel
     public function index()
     {
         global $_G;
-     //   $test=$this->pdoTest();
-       // p('app下的index方法');
-        //$this->display('index/index.html');
+
+        $this->display('index/index.html');
 
     }
 

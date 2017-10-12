@@ -1,7 +1,7 @@
 <?php
 
 /* index/index.html */
-class __TwigTemplate_45160caaf8b7dc20e7b7ec0de7230222ad03cfaf432b667817cb37211473a342 extends Twig_Template
+class __TwigTemplate_efefa919eb278dc6098fe940e3ce9f21a6e57483ec64d12ccbe5c0b8da0bc616 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -63,6 +63,6 @@ class __TwigTemplate_45160caaf8b7dc20e7b7ec0de7230222ad03cfaf432b667817cb3721147
 <body>
 12312
 </body>
-</html>", "index/index.html", "C:\\wamp\\www\\calfbb2\\calfbb\\addons\\db\\template\\index\\index.html");
+</html>", "index/index.html", "/data/test/calfbb/addons/db/template/index/index.html");
     }
 }

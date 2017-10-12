@@ -63,28 +63,39 @@ class niubaobao
         }
         $this->globalDefined();
         \Framework\library\log::init();
+        // 开始替换\为/
+        $this->ctrlFile = str_replace('\\', '/', $this->ctrlFile);
 
         if (is_file($this->ctrlFile)) {
-            include $this->ctrlFile;
 
+            include $this->ctrlFile;
 
         } else {
 
             if (DEBUG) {
-                throw new Exception($this->ctrlClass . '是一个不存在的控制器');
+                throw new \Exception($this->ctrlClass . '是一个不存在的控制器');
             } else {
                 show404();
             }
         }
         $ctrl = new $this->ctrlClass();
-
         $action = $this->action;
         //如果开启restful,那么加载方法时带上请求类型
         if (\Framework\library\conf::get('OPEN_RESTFUL', 'system')) {
             $action = strtolower($request->method()) . ucfirst($action);
         }
 
-        $ctrl->$action();
+
+        //检测方法是否存在
+        if(method_exists($ctrl,$action)){
+            $ctrl->$action();
+        }else{
+            throw new \Exception($action . '是一个不存在的方法');
+        }
+
+
+
+
     }
 
     /**
@@ -163,7 +174,9 @@ class niubaobao
 
     }
 
-
+    /**
+     * 全局配置函数
+     */
     public function globalDefined(){
         global $_G;
          define('ATTACHMENT_ROOT', NIUBAOBAO .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径

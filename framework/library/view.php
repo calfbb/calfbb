@@ -32,6 +32,7 @@ trait view
     {
         $module= $module !="" ? $module  : APP;
         //echo $module . 'template/' . $file;exit;
+        $module=str_replace('\\', '/', $module);
         if (is_file($module . 'template/' . $file)) {
             \Twig_Autoloader::register();
             $loader = new \Twig_Loader_Filesystem($module . 'template/');
