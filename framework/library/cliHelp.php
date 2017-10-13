@@ -8,7 +8,7 @@ class cliHelp
         return "<?php
 namespace ".MODULE."\\ctrl;
 
-class ".$file." extends \\niubaobao
+class ".$file." extends \\Calfbb
 {
     public function index()
     {

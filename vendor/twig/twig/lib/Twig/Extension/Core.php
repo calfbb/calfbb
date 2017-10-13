@@ -987,11 +987,9 @@ function twig_escape_filter(Twig_Environment $env, $string, $strategy = 'html', 
     }
 
     if (!is_string($string)) {
-
         if (is_object($string) && method_exists($string, '__toString')) {
             $string = (string) $string;
         } elseif (in_array($strategy, array('html', 'js', 'css', 'html_attr', 'url'))) {
-
             return $string;
         }
     }
@@ -1025,18 +1023,18 @@ function twig_escape_filter(Twig_Environment $env, $string, $strategy = 'html', 
             );
 
             if (isset($htmlspecialcharsCharsets[$charset])) {
-                return htmlspecialchars_decode($string, ENT_QUOTES | ENT_SUBSTITUTE);
+                return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, $charset);
             }
 
             if (isset($htmlspecialcharsCharsets[strtoupper($charset)])) {
                 // cache the lowercase variant for future iterations
                 $htmlspecialcharsCharsets[$charset] = true;
 
-                return htmlspecialchars_decode($string, ENT_QUOTES | ENT_SUBSTITUTE, $charset);
+                return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, $charset);
             }
 
             $string = twig_convert_encoding($string, 'UTF-8', $charset);
-            $string = htmlspecialchars_decode($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $string = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
             return twig_convert_encoding($string, $charset, 'UTF-8');
 

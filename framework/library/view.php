@@ -34,7 +34,7 @@ trait view
 
         if($_G['config']['TPL_STATUS']==true){//如果开启模版机制
 
-            $module= $module !="" ? $module  : NIUBAOBAO;
+            $module= $module !="" ? $module  : CALFBB;
             $module=str_replace('\\', '/', $module);
             $module=$module .'/'.$_G['config']['TPL'].'/'.$_G['config']['TPL_DEFAULT']. '/';
         }else{
@@ -48,7 +48,7 @@ trait view
             \Twig_Autoloader::register();
             $loader = new \Twig_Loader_Filesystem($module);
             $twig = new \Twig_Environment($loader, [
-                'cache' => NIUBAOBAO . '/data/cache/'.MODULE.'/template',
+                'cache' => CALFBB . '/data/cache/'.MODULE.'/template',
                 'debug' => DEBUG,
             ]);
 

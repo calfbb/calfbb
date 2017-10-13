@@ -1,26 +1,18 @@
 <?php
 /**
- * lnmpbao - A PHP Framework For Web Artisans
- *
- * @package  clafbaby
- * @author   牛宝宝技术团队  <baobao@clafbaby.com>
+ * @ClassName:引擎核心类
+ * @description：实现几个功能，类自动加载、启动框架、引入模型、引入视图
+ * @author:calfbb技术团队
+ * Date: 2017/10/12
  */
-/* ========================================================================
- * niubaobao核心类
- * 实现以下几个功能
- * 类自动加载
- * 启动框架
- * 引入模型
- * 引入视图
- * ======================================================================== */
 
-class niubaobao
+class Calfbb
 {
 
     public $model;/** model用于存放已经加载的model模型,下次加载时直接返回*/
     public $assign;/** 视图赋值*/
     public $module;/** 访问模块*/
-    public $module_name;/** 访问模块名*/
+    public $moduleName;/** 访问模块名*/
     public $ctrlFile;/** 访问文件路径*/
     public $ctrlClass;/** 访问类*/
     public $action;/** 访问方法*/
@@ -38,9 +30,9 @@ class niubaobao
 
             include_once CORE . $class . '.php';
         } else {
-            if (is_file(NIUBAOBAO . '/' . $class . '.php')) {
+            if (is_file(CALFBB . '/' . $class . '.php')) {
 
-                include_once NIUBAOBAO . '/' . $class . '.php';
+                include_once CALFBB . '/' . $class . '.php';
             }
         }
     }
@@ -107,20 +99,20 @@ class niubaobao
 
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if (@$_GET['m'] !=$request->route['DEFAULT_MODULE'] && @isset($_GET['m'])) {
-            $this->module_name = $request->route['DEFAULT_ADDONS'].'\\'.$_GET['m'];
+            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$_GET['m'];
 
         } else {
 
-            $this->module_name = $request->module;
+            $this->moduleName = $request->module;
 
         }
 
-        $this->ctrlClass = '\\' . $this->module_name . '\controller\\' . ucwords($request->ctrl) ;
+        $this->ctrlClass = '\\' . $this->moduleName . '\controller\\' . ucwords($request->ctrl) ;
 
         $this->action = $request->action;
         //系统默认目录
 
-         $this->ctrlFile = NIUBAOBAO . '/'.$this->module_name.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
+         $this->ctrlFile = CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
 
 
     }
@@ -133,22 +125,22 @@ class niubaobao
 
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if ($request->module != $request->route['DEFAULT_MODULE']) {
-            $this->module_name = $request->route['DEFAULT_ADDONS'].'\\'.$request->module;
+            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$request->module;
 
         } else {
 
-            $this->module_name = $request->module;
+            $this->moduleName = $request->module;
 
         }
 
 
 
-        $this->ctrlClass = '\\' . $this->module_name . '\controller\\' . ucwords($request->ctrl) ;
+        $this->ctrlClass = '\\' . $this->moduleName . '\controller\\' . ucwords($request->ctrl) ;
 
         $this->action = $request->action;
         //系统默认目录
 
-        $this->ctrlFile =NIUBAOBAO . '/'.$this->module_name.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
+        $this->ctrlFile =CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
 
 
     }
@@ -162,7 +154,7 @@ class niubaobao
     public static function loadFunc($func)
     {
 
-            if (is_file(NIUBAOBAO . '/' . $func . '.php')) {
+            if (is_file(CALFBB . '/' . $func . '.php')) {
 
                 include_once CORE .'function/'.$func.'.php';
 
@@ -179,9 +171,9 @@ class niubaobao
      */
     public function globalDefined(){
         global $_G;
-         define('ATTACHMENT_ROOT', NIUBAOBAO .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径
-         define('APP', NIUBAOBAO . '/'.$this->module_name.'/');//定义当前模块绝对路径
-         define('MODULE', $this->module_name);//定义当前模块名
+         define('ATTACHMENT_ROOT', CALFBB .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径
+         define('APP', CALFBB . '/'.$this->moduleName.'/');//定义当前模块绝对路径
+         define('MODULE', $this->moduleName);//定义当前模块名
 
         if($_G['config']['HTTP']){
             if(!empty($_G['config']['MASTER'])){

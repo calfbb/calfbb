@@ -147,7 +147,6 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
 
     public function getCacheKey($name)
     {
-
         $path = $this->findTemplate($name);
         $len = strlen($this->rootPath);
         if (0 === strncmp($this->rootPath, $path, $len)) {
@@ -181,7 +180,6 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
 
     protected function findTemplate($name)
     {
-
         $throw = func_num_args() > 1 ? func_get_arg(1) : true;
         $name = $this->normalizeName($name);
 
@@ -212,43 +210,16 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
         }
 
         foreach ($this->paths[$namespace] as $path) {
-
             if (!$this->isAbsolutePath($path)) {
                 $path = $this->rootPath.'/'.$path;
             }
-            /** 牛宝宝技术团队
-             *   增加引入web公共文件
-             * */
-            $niubaoaoPath=explode('/',$shortname);
-            if(@$niubaoaoPath[0] == 'niubaobao'){
-                $path = $this->rootPath.'template/common';
-                $shortname=$niubaoaoPath[1];
-            }
-            $filename=$path.'/'.$shortname;
 
-            if(@$niubaoaoPath[0] == 'attachment'){
-                $shortname="";
-
-                for($pi=1;$pi < count($niubaoaoPath);$pi++){
-
-                    $shortname.=$niubaoaoPath[$pi]."/";
-
-                }
-                $shortname=rtrim($shortname,'/');
-                $path = ATTACHMENT_ROOT;
-                $filename=ATTACHMENT_ROOT.$shortname;
-
-            }
-
-
-
-
-            if (is_file($filename)) {
-                if (false !== $realpath = realpath($filename)) {
+            if (is_file($path.'/'.$shortname)) {
+                if (false !== $realpath = realpath($path.'/'.$shortname)) {
                     return $this->cache[$name] = $realpath;
                 }
 
-                return $this->cache[$name] = $filename;
+                return $this->cache[$name] = $path.'/'.$shortname;
             }
         }
 

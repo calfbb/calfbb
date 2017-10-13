@@ -25,7 +25,7 @@ class conf
         if(isset(self::$conf[$file][$name])) {
             return self::$conf[$file][$name];
         } else {
-            $conf = NIUBAOBAO.'/data/'.$file.'.php';
+            $conf = CALFBB.'/data/'.$file.'.php';
             if(is_file($conf)) {
                 self::$conf[$file] = include $conf;
                     return isset(self::$conf[$file][$name])?self::$conf[$file][$name]:false;
@@ -47,7 +47,7 @@ class conf
         if(isset(self::$conf[$file])) {
             return self::$conf[$file];
         } else {
-            $conf = NIUBAOBAO.'/data/'.$file.'.php';
+            $conf = CALFBB.'/data/'.$file.'.php';
             if(is_file($conf)) {
                 self::$conf[$file] = include $conf;
                 return self::$conf[$file];
@@ -71,7 +71,7 @@ class conf
         if(isset(self::$conf[$file])) {
             return self::$conf[$file];
         } else {
-            $conf = NIUBAOBAO.'/data/'.$file.'.php';
+            $conf = CALFBB.'/data/'.$file.'.php';
             if(is_file($conf)) {
                 self::$conf[$file] = include $conf;
 
@@ -89,7 +89,7 @@ class conf
 //     * 判断应用是否有单独配置文件
 //     */
 //    static function appConfig($file){
-//        $conf = NIUBAOBAO.'/data/'.$file.'.php';
+//        $conf = CALFBB.'/data/'.$file.'.php';
 //        if(is_file($conf)) {
 //            self::$conf[$file] = include $conf;
 //

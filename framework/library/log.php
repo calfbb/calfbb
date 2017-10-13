@@ -3,7 +3,7 @@
  * 日志类
  * 日志驱动和储存位置请查看config/log.php
  * 使用方法(全局中)
- * \niubaobao\log::log('DEBUG','出现了一个BUG');
+ * \Calfbb\log::log('DEBUG','出现了一个BUG');
  * ======================================================================== */
 namespace  Framework\library;
 

@@ -181,7 +181,7 @@ function message($message,$url,$time=3){
     $class->assign('url',$url);
     $class->assign('time',(int)$time);
 
-    $module= $_GPC['m'] !="web" ? NIUBAOBAO.'/web/' : '';
+    $module= $_GPC['m'] !="web" ? CALFBB.'/web/' : '';
 
     $class->display('common/message.html',$module);
     exit;

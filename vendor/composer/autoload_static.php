@@ -7,24 +7,13 @@ namespace Composer\Autoload;
 class ComposerStaticInit8fec56aa64906aabc4cef4024024dee9
 {
     public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        'eb84931b732bb08d0a643d038cbbf2ac' => __DIR__ . '/../..' . '/framework/niubaobao.php',
+        'cc276f477cc1266cfb8d694fb0715d47' => __DIR__ . '/../..' . '/framework/Calfbb.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'W' => 
-        array (
-            'Whoops\\' => 7,
-        ),
         'T' => 
         array (
             'Twig\\' => 5,
-        ),
-        'S' => 
-        array (
-            'Symfony\\Polyfill\\Mbstring\\' => 26,
-            'Symfony\\Component\\VarDumper\\' => 28,
         ),
         'P' => 
         array (
@@ -35,28 +24,12 @@ class ComposerStaticInit8fec56aa64906aabc4cef4024024dee9
             'Monolog\\' => 8,
             'Medoo\\' => 6,
         ),
-        'C' => 
-        array (
-            'Crypt\\' => 6,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Whoops\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
-        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
-        ),
-        'Symfony\\Polyfill\\Mbstring\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'Symfony\\Component\\VarDumper\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
         'Psr\\Log\\' => 
         array (
@@ -69,10 +42,6 @@ class ComposerStaticInit8fec56aa64906aabc4cef4024024dee9
         'Medoo\\' => 
         array (
             0 => __DIR__ . '/..' . '/catfan/medoo/src',
-        ),
-        'Crypt\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/kphcdr/crypt/src/Crypt',
         ),
     );
 

@@ -8,7 +8,7 @@ return array(
 
    'CACHE_TYPE'=>'file',
    'OPTION'=> [
-       'path'=>NIUBAOBAO.'/log/cache',//储存位置
+       'path'=>CALFBB.'/log/cache',//储存位置
        'time'=>3600,//超时时间
    ]
        

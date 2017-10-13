@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-class Twig_Tests_Loader_ChainTest extends PHPUnit_Framework_TestCase
+class Twig_Tests_Loader_ChainTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group legacy
@@ -30,16 +30,16 @@ class Twig_Tests_Loader_ChainTest extends PHPUnit_Framework_TestCase
         $path = dirname(__FILE__).'/../Fixtures';
         $loader = new Twig_Loader_Chain(array(
             new Twig_Loader_Array(array('foo' => 'bar')),
-            new Twig_Loader_Array(array('errors/chart.html' => 'baz')),
+            new Twig_Loader_Array(array('errors/index.html' => 'baz')),
             new Twig_Loader_Filesystem(array($path)),
         ));
 
         $this->assertEquals('foo', $loader->getSourceContext('foo')->getName());
         $this->assertSame('', $loader->getSourceContext('foo')->getPath());
 
-        $this->assertEquals('errors/chart.html', $loader->getSourceContext('errors/chart.html')->getName());
-        $this->assertSame('', $loader->getSourceContext('errors/chart.html')->getPath());
-        $this->assertEquals('baz', $loader->getSourceContext('errors/chart.html')->getCode());
+        $this->assertEquals('errors/index.html', $loader->getSourceContext('errors/index.html')->getName());
+        $this->assertSame('', $loader->getSourceContext('errors/index.html')->getPath());
+        $this->assertEquals('baz', $loader->getSourceContext('errors/index.html')->getCode());
 
         $this->assertEquals('errors/base.html', $loader->getSourceContext('errors/base.html')->getName());
         $this->assertEquals(realpath($path.'/errors/base.html'), realpath($loader->getSourceContext('errors/base.html')->getPath()));
