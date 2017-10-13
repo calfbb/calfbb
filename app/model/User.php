@@ -1,27 +1,36 @@
 <?php
 /**
- * 示例model
+ * @className：user表相关数据库模型
+ * @description：用户数据操作
+ * @author:calfbb技术团队
+ * Date: 2017/10/13
  */
 namespace  App\model;
 
 use PDO;//引入pdo类库，确保php开启pdo扩展
 use Exception;
 use PDOException;
-class  UserModel{
+class  User{
 
+    /**
+     * @var string $userTableName 用户表名
+     */
+    public $userTableName='user';
+
+    /**
+     *  PDO链接演示方法
+     */
     public function pdoTest(){
 
        $pdo=new PDO('mysql:host=127.0.0.1;dbname=calfbaby;charset=utf8;port=3306','root','123456');
 
-       $arr=$pdo->query('select *  from   calf_user');
+       $arr=$pdo->query("select *  from   calf_user");
 
        $arrs=$arr->fetchAll();
 
         p($arrs);
 
     }
-
-
 
     /**
      * 用户权限表写入用户数据
@@ -49,11 +58,11 @@ class  UserModel{
 
 
 
-    /**新增用户
+    /**
+     * 插入一条用户数据
      * @param $userdata
-     * @return mixed
+     * @return array | bool $result
      */
-
     public function insertUser($userdata){
         $validate=random(6);//获取6位随机字符串
 
@@ -65,7 +74,7 @@ class  UserModel{
             'update_time'=>time(),
             'create_time'=>time()
         ];
-        $result=db_insert(self::$table_user,$data);
+        $result=db_insert($this->userTableName,$data);
         return $result;
     }
 

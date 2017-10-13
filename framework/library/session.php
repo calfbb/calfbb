@@ -5,7 +5,7 @@
  */
 namespace  Framework\library;
 
-class session
+class Session
 {
 
 	function set($sessionName,$value)

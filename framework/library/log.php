@@ -5,10 +5,10 @@
  * 使用方法(全局中)
  * \Calfbb\log::log('DEBUG','出现了一个BUG');
  * ======================================================================== */
-namespace  Framework\library;
+namespace  framework\library;
 
 
-class log
+class Log
 {
     static public $class;
     static public $logMessage;
@@ -17,7 +17,7 @@ class log
     {
         if (!self::$class) {
 
-            $type = conf::get('LOG_TYPE', 'log');
+            $type = Conf::get('LOG_TYPE', 'log');
 
             $class = '\\Framework\\library\\lib\\log\\' . $type;
 

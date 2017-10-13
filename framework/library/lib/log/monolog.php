@@ -1,8 +1,8 @@
 <?php
 namespace Framework\library\lib\log;
 
-use Framework\library\conf;
-class monolog
+use Framework\library\Conf;
+class Monolog
 {
     public $class;
     public function __construct()

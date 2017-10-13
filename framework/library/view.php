@@ -2,7 +2,7 @@
 
 namespace  Framework\library;
 
-trait view
+trait View
 {
     public $assign="";
     /**
@@ -65,6 +65,6 @@ trait view
 }
 
 
-class views{
-    use view;
+class Views{
+    use View;
 }

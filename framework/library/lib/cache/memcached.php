@@ -1,7 +1,7 @@
 <?php
 namespace Framework\library\lib\cache;
 
-class memcached
+class Memcached
 {
     private $time = 3600;  #存活时间
     private $mem;

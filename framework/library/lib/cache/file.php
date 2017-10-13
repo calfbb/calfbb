@@ -1,7 +1,7 @@
 <?php
-namespace Framework\library\lib\cache;
+namespace framework\library\lib\cache;
 
-class file
+class File
 {
     private $path;  #存储路径
     private $time = 3600;  #存活时间

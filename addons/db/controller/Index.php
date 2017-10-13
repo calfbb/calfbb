@@ -8,9 +8,8 @@
 namespace Addons\db\controller;
 
 use  Framework\library\view;
-
-
-class Index
+use  Addons\db\model\User;
+class Index extends  User
 {
     use view;
     /**

@@ -2,10 +2,10 @@
 /**
  * copyright http://git.oschina.net/jiusem/PHPPage
  */
-namespace  Framework\library;
+namespace  framework\library;
 
 
-class page{
+class Page{
 
     protected $_page_max = 0;
     protected $_total = 0;

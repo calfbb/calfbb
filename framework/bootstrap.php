@@ -12,14 +12,22 @@ $_G = $_GPC = array();
 $_GPC=array_merge($_GET,$_POST);
 
 ini_set('display_errors',true);
-//载入composer
 
-require __DIR__ . '/../vendor/autoload.php';
+
+require __DIR__ . '/../vendor/autoload.php';//载入composer
 
 /* ========================================================================
  * 常量配置
  * ======================================================================== */
 define('DEBUG', true);//调试模式
+//错误提示
+if(DEBUG) {
+
+    ini_set('display_errors',true);
+
+} else {
+    ini_set('display_errors',false);
+}
 define('CALFBB', realpath(__DIR__.'/../'));    // 根目录
 //系统路径
 define('CORE', CALFBB . '/framework/');
@@ -51,16 +59,9 @@ spl_autoload_register('\Calfbb::load');
 
 
 //设置默认时区
-date_default_timezone_set(\Framework\library\conf::get('TIMEZONE','system'));
+date_default_timezone_set(\Framework\library\Conf::get('TIMEZONE','system'));
 
-//错误提示
-if(DEBUG) {
 
-    ini_set('display_errors',true);
-
-} else {
-    ini_set('display_errors',false);
-}
 
 
 
