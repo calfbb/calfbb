@@ -9,14 +9,14 @@
     function DB()
     {
          static $obj;
-
+         global $_G;
 
         if (!$obj) {
             /**
              * 加载数据库配置文件
              */
 
-        $obj = new \Medoo\Medoo(\Framework\library\conf::G('database'));
+        $obj = new \Medoo\Medoo($_G['database']);
 
 
         }

@@ -19,7 +19,7 @@ class conf
      * @param string $file 文件名
      * @return mix
      */
-    static public function get($name,$file='conf')
+    static public function get($name,$file='config')
     {
         /*改写*/
         if(isset(self::$conf[$file][$name])) {
@@ -74,6 +74,8 @@ class conf
             $conf = NIUBAOBAO.'/data/'.$file.'.php';
             if(is_file($conf)) {
                 self::$conf[$file] = include $conf;
+
+
                 $_G[$file]=self::$conf[$file];
                 return self::$conf[$file];
             } else {
@@ -82,4 +84,20 @@ class conf
         }
 
     }
+
+//    /**
+//     * 判断应用是否有单独配置文件
+//     */
+//    static function appConfig($file){
+//        $conf = NIUBAOBAO.'/data/'.$file.'.php';
+//        if(is_file($conf)) {
+//            self::$conf[$file] = include $conf;
+//
+//
+//            $_G[$file]=self::$conf[$file];
+//            return self::$conf[$file];
+//        } else {
+//            return false;
+//        }
+//    }
 }

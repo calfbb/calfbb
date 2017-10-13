@@ -204,7 +204,7 @@ class niubaobao
 
         $_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.\Framework\library\conf::get('attachdir', 'file');
 
-//此函数加载需要上配置文件之下
+        //此函数加载需要上配置文件之下
         include_once CORE .'functions/function.php';
     }
 

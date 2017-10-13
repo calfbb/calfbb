@@ -30,12 +30,23 @@ trait view
      */
     public function display($file,$module="")
     {
-        $module= $module !="" ? $module  : APP;
-        //echo $module . 'template/' . $file;exit;
-        $module=str_replace('\\', '/', $module);
-        if (is_file($module . 'template/' . $file)) {
+        global $_G;
+
+        if($_G['config']['TPL_STATUS']==true){//如果开启模版机制
+
+            $module= $module !="" ? $module  : NIUBAOBAO;
+            $module=str_replace('\\', '/', $module);
+            $module=$module .'/'.$_G['config']['TPL'].'/'.$_G['config']['TPL_DEFAULT']. '/';
+        }else{
+            $module= $module !="" ? $module  : APP;
+            $module=str_replace('\\', '/', $module);
+            $module=$module . 'template/';
+        }
+
+        //p($file);
+        if (is_file($module. $file)) {
             \Twig_Autoloader::register();
-            $loader = new \Twig_Loader_Filesystem($module . 'template/');
+            $loader = new \Twig_Loader_Filesystem($module);
             $twig = new \Twig_Environment($loader, [
                 'cache' => NIUBAOBAO . '/data/cache/'.MODULE.'/template',
                 'debug' => DEBUG,

@@ -14,7 +14,7 @@ class Index extends UserModel
     public function index()
     {
         global $_G;
-
+        
         $this->display('index/index.html');
 
     }
