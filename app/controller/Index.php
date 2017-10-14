@@ -18,7 +18,7 @@ class Index extends User
     {
         global $_G;
         
-        $this->display('index/index.html');
+        $this->display('index/index');
 
     }
 

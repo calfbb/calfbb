@@ -1,7 +1,7 @@
 <?php
-namespace  Framework\library;
+namespace  framework\library;
 
-class cookie
+class Cookie
 {
     const SECRETKEY = 'jonson';//混淆字符串
 

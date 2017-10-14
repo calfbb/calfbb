@@ -1,5 +1,5 @@
 <?php
-namespace Framework\library;
+namespace framework\library;
 /**
  * 文件操作   牛宝宝技术团队
  *

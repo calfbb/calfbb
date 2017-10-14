@@ -2,10 +2,10 @@
 /* ========================================================================
  * 缓存类
  * ======================================================================== */
-namespace  Framework\library;
+namespace  framework\library;
 
 
-class cache
+class Cache
 {
     private $class;
     public function __construct()

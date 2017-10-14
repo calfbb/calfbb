@@ -3,7 +3,7 @@
  * session 操作类
  * @author 张森  2013-08-27
  */
-namespace  Framework\library;
+namespace  framework\library;
 
 class Session
 {

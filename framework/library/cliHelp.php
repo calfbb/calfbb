@@ -1,7 +1,7 @@
 <?php
-namespace  Framework\library;
+namespace  framework\library;
 
-class cliHelp
+class CliHelp
 {
     public function newCtrl($file)
     {

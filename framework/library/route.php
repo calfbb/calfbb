@@ -5,7 +5,7 @@
  * ======================================================================== */
 namespace  Framework\library;
 
-class route
+class Route
 {
     public $ctrl;
     public $action;
@@ -19,11 +19,11 @@ class route
         $route = conf::all('route');
         $this->route=$route;
         $this->addons=$route['DEFAULT_ADDONS'];
-        //如果路由是第一种模式
-        if($route['PATH_INFO']==2){
+        //如果路由是第二种跟第三种模式
+        if($route['PATH_INFO']==2 || $route['PATH_INFO']==3){
             $this->pathinfoTwo($route);
 
-        }else{
+        }else{ //如果路由是第一种模式
             $this->pathinfoOne($route);
         }
 

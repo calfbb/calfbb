@@ -41,19 +41,17 @@ define('CALFBB_VERSION','0.1.0');
 
 //加载类库
 
-include_once CORE .'functions/string.php';
-include_once CORE .'functions/database.php';
-include_once CORE .'functions/code.php';
+
 //加载核心文件
 include_once CORE . 'Calfbb.php';
 
 
 //注册自动加载
-spl_autoload_register('\Calfbb::load');
+spl_autoload_register('\framework\Calfbb::load');
 
 //加载主配置文件
-\Framework\library\conf::G('config');
-\Framework\library\conf::G('database');
+\Framework\library\Conf::G('config');
+\Framework\library\Conf::G('database');
 
 
 
@@ -66,7 +64,7 @@ date_default_timezone_set(\Framework\library\Conf::get('TIMEZONE','system'));
 
 
 //开始跑框架
-$calfbb=new \Calfbb;
+$calfbb=new \framework\Calfbb;
 $calfbb->run();
 
 

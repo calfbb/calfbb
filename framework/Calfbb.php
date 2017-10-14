@@ -5,6 +5,7 @@
  * @author:calfbb技术团队
  * Date: 2017/10/12
  */
+namespace  framework;
 
 class Calfbb
 {
@@ -45,16 +46,31 @@ class Calfbb
     public  function run()
     {
         global $_G;
+
         $request = new \Framework\library\route();
 
+
+        //切换访问模式
         if($request->route['PATH_INFO']==2){
             $this->pathTwo($request);
-        }else{
+            $this->globalDefined();//加载配置
+        }else if($request->route['PATH_INFO']==3 && @(!isset($_GET['m']))){
+            $this->pathThree($request);
+
+            $this->globalDefined();//加载配置
+            return ;
+        }else {
             $this->pathOne($request);
+            $this->globalDefined();//加载配置
 
         }
-        $this->globalDefined();
-        \Framework\library\log::init();
+        \Framework\library\log::init();//初始化日志
+
+        include_once CORE .'functions/string.php';
+        include_once CORE .'functions/database.php';
+        include_once CORE .'functions/code.php';
+        //此函数加载需要上配置文件之下
+        include_once CORE .'functions/function.php';
         // 开始替换\为/
         $this->ctrlFile = str_replace('\\', '/', $this->ctrlFile);
 
@@ -145,7 +161,27 @@ class Calfbb
 
     }
 
+    /**
+     * pathinfo  3 api开发模式  使用／带参数
+     */
 
+    public  function pathThree($request){
+        //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
+        if ($request->module != $request->route['DEFAULT_MODULE']) {
+            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$request->module;
+
+        } else {
+
+            $this->moduleName = $request->module;
+
+        }
+
+        $view=new \Framework\library\Views;
+
+        $view->display($request->ctrl.'/'.$request->action);
+
+
+    }
 
     /**
      * 引入函数类
@@ -196,8 +232,6 @@ class Calfbb
 
         $_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.\Framework\library\conf::get('attachdir', 'file');
 
-        //此函数加载需要上配置文件之下
-        include_once CORE .'functions/function.php';
     }
 
 }

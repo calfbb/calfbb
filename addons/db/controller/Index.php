@@ -23,7 +23,7 @@ class Index extends  User
      */
     public function index(){
 
-        $this->display('index/index.html');
+        $this->display('index/index');
     }
 
     /**
