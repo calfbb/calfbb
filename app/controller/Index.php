@@ -7,11 +7,11 @@
  */
 namespace App\controller;
 
-use  Framework\library\view;
+use  Framework\library\View;
 use \App\model\User;
 class Index extends User
 {
-   use view;
+   use View;
 
     //控制台
     public function index()

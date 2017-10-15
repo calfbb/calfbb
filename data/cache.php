@@ -6,7 +6,7 @@ return array(
      * file 存储
      */
 
-   'CACHE_TYPE'=>'file',
+   'CACHE_TYPE'=>'File',
    'OPTION'=> [
        'path'=>CALFBB.'/log/cache',//储存位置
        'time'=>3600,//超时时间

@@ -47,16 +47,17 @@ class Calfbb
     {
         global $_G;
 
-        $request = new \Framework\library\route();
+        $request = new \Framework\library\Route();
 
 
         //切换访问模式
         if($request->route['PATH_INFO']==2){
+
             $this->pathTwo($request);
             $this->globalDefined();//加载配置
         }else if($request->route['PATH_INFO']==3 && @(!isset($_GET['m']))){
-            $this->pathThree($request);
 
+            $this->pathThree($request);
             $this->globalDefined();//加载配置
             return ;
         }else {
@@ -64,7 +65,7 @@ class Calfbb
             $this->globalDefined();//加载配置
 
         }
-        \Framework\library\log::init();//初始化日志
+        \Framework\library\Log::init();//初始化日志
 
         include_once CORE .'functions/string.php';
         include_once CORE .'functions/database.php';

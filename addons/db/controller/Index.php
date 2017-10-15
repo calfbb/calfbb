@@ -7,11 +7,11 @@
  */
 namespace Addons\db\controller;
 
-use  Framework\library\view;
+use  Framework\library\View;
 use  Addons\db\model\User;
 class Index extends  User
 {
-    use view;
+    use View;
     /**
      * @var string $userName;用户名
      */
