@@ -2,7 +2,7 @@
 namespace Framework\library\lib\log;
 
 use Framework\library\Conf;
-class Monolog 
+class Monolog
 {
     public $class;
     public function __construct()
