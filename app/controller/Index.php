@@ -16,8 +16,8 @@ class Index extends User
     //控制台
     public function index()
     {
-        global $_G;
-        
+        global $_G,$_GPC;
+       // show_json($_G);
         $this->display('index/index');
 
     }

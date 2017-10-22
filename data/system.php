@@ -3,5 +3,5 @@
 return array(
     'OPEN_RESTFUL'=>false,
     'TIMEZONE'=>'Asia/Shanghai',
-
+    'DEBUG'=>true
 );

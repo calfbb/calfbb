@@ -1,10 +1,10 @@
 <?php
 
 /**
- * lnmpbao - A PHP Framework For Web Artisans
+ * calfbb - A PHP Framework For Web Artisans
  *
- * @package  lnmpbao
- * @author   宝宝技术团队  <baobao@lnmpbao.com>
+ * @package  calfbb
+ * @author   calfbb技术团队  <baobao@calfbb.com>
  */
 
 

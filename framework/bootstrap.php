@@ -9,7 +9,7 @@ session_start();
 header("Content-type:text/html;charset=utf-8");
 $_G = $_GPC = array();
 //合并get  与post请求
-$_GPC=array_merge($_GET,$_POST);
+$_GPC=array_merge($_GET,$_POST,$_COOKIE);
 
 ini_set('display_errors',true);
 
