@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'cc276f477cc1266cfb8d694fb0715d47' => $baseDir . '/framework/Calfbb.php',
+    '8b1c2812c6973eff1bafa08313829e2a' => $baseDir . '/framework/Calfbb.php',
 );
