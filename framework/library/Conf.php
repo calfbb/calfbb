@@ -74,8 +74,6 @@ class Conf
             $conf = CALFBB.'/data/'.$file.'.php';
             if(is_file($conf)) {
                 self::$conf[$file] = include $conf;
-
-
                 $_G[$file]=self::$conf[$file];
                 return self::$conf[$file];
             } else {
@@ -85,19 +83,28 @@ class Conf
 
     }
 
-//    /**
-//     * 判断应用是否有单独配置文件
-//     */
-//    static function appConfig($file){
-//        $conf = CALFBB.'/data/'.$file.'.php';
-//        if(is_file($conf)) {
-//            self::$conf[$file] = include $conf;
-//
-//
-//            $_G[$file]=self::$conf[$file];
-//            return self::$conf[$file];
-//        } else {
-//            return false;
-//        }
-//    }
+    /**
+     * 判断应用是否有单独配置文件
+     *
+     */
+    static function indepConfig(){
+        global $_G;
+        $config = APP.'config.php';
+        $database = APP.'database.php';
+        if(is_file($config)) {
+            self::$conf['config'] = array_merge(self::$conf['config'],include $config);
+            $_G['config']=self::$conf['config'];
+            return self::$conf['config'];
+        }
+
+        if(is_file($database)) {
+            self::$conf['database'] = array_merge(self::$conf['database'],include $database);
+            $_G['database']=self::$conf['database'];
+            return self::$conf['config'];
+        }
+
+        return false;
+
+
+    }
 }

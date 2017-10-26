@@ -87,10 +87,11 @@
     //limit数组    pageindex//当前第几页   pagesize 每页显示多少条
     /**
      * @param $tablename
-     * @param string $fields
+     * @param array  $fields ['id','name']
      * @param array $where
-     * @param array $limit
-     * @param string $orderby
+     * @param array $page  当前页数
+     * @param array $pagesize 每页显示条数
+     * @param array $orderby 排序 ['id'=>'DESC'] 注意大小写
      * @return mixed
      */
     function db_select($tablename, $fields = "*",$where = [],$page=1,$pagesize=10,$orderby=[],$join=[])

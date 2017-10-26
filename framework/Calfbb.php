@@ -87,6 +87,8 @@ class Calfbb
                 show404();
             }
         }
+
+
         $ctrl = new $this->ctrlClass();
         $action = $this->action;
         //如果开启restful,那么加载方法时带上请求类型
@@ -116,7 +118,7 @@ class Calfbb
 
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if (@$_GET['m'] !=$request->route['DEFAULT_MODULE'] && @isset($_GET['m'])) {
-            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$_GET['m'];
+            $this->moduleName = $request->route['ADDONS'].'\\'.$_GET['m'];
 
         } else {
 
@@ -142,7 +144,7 @@ class Calfbb
 
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if ($request->module != $request->route['DEFAULT_MODULE']) {
-            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$request->module;
+            $this->moduleName = $request->route['ADDONS'].'\\'.$request->module;
 
         } else {
 
@@ -169,7 +171,7 @@ class Calfbb
     public  function pathThree($request){
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if ($request->module != $request->route['DEFAULT_MODULE']) {
-            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$request->module;
+            $this->moduleName = $request->route['ADDONS'].'\\'.$request->module;
 
         } else {
 
@@ -208,9 +210,10 @@ class Calfbb
      */
     public function globalDefined(){
         global $_G;
+         $moduleName=str_replace('\\', '/', $this->moduleName);
          define('ATTACHMENT_ROOT', CALFBB .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径
-         define('APP', CALFBB . '/'.$this->moduleName.'/');//定义当前模块绝对路径
-         define('MODULE', $this->moduleName);//定义当前模块名
+         define('APP', CALFBB . '/'.$moduleName.'/');//定义当前模块绝对路径
+         define('MODULE', $moduleName);//定义当前模块名
 
         if($_G['config']['HTTP']){
             if(!empty($_G['config']['MASTER'])){
@@ -233,6 +236,10 @@ class Calfbb
 
         $_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.\Framework\library\conf::get('attachdir', 'file');
 
+        //判断是否开启独立配置
+        if(@$_G['config']['CONFIG_STATUS']){
+            \Framework\library\conf::indepConfig();
+        }
     }
 
 }

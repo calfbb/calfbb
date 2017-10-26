@@ -17,8 +17,9 @@ class Route
     public function __construct()
     {
         $route = conf::all('route');
+        $route['ADDONS'] = conf::get('ADDONS','config');
         $this->route=$route;
-        $this->addons=$route['DEFAULT_ADDONS'];
+        $this->addons=$route['ADDONS'];
         //如果路由是第二种跟第三种模式
         if($route['PATH_INFO']==2 || $route['PATH_INFO']==3){
             $this->pathinfoTwo($route);

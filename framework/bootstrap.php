@@ -19,15 +19,7 @@ require __DIR__ . '/../vendor/autoload.php';//载入composer
 /* ========================================================================
  * 常量配置
  * ======================================================================== */
-define('DEBUG', true);//调试模式
-//错误提示
-if(DEBUG) {
 
-    ini_set('display_errors',true);
-
-} else {
-    ini_set('display_errors',false);
-}
 define('CALFBB', realpath(__DIR__.'/../'));    // 根目录
 //系统路径
 define('CORE', CALFBB . '/framework/');
@@ -59,13 +51,22 @@ spl_autoload_register('\framework\Calfbb::load');
 //设置默认时区
 date_default_timezone_set(\Framework\library\Conf::get('TIMEZONE','system'));
 
+//定义是否开启调试模式
+define('DEBUG',\Framework\library\Conf::get('DEBUG','system'));//调试模式
+//错误提示
+if(DEBUG) {
 
+    ini_set('display_errors',true);
 
+} else {
+    ini_set('display_errors',false);
+}
 
 
 //开始跑框架
 $calfbb=new \framework\Calfbb;
 $calfbb->run();
+
 
 
 
