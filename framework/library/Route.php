@@ -49,7 +49,8 @@ class Route
     {
         global $_GPC;
 
-        if (isset($_SERVER['REQUEST_URI'])) {
+
+        if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']) {
             $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
 
             //丢掉?以及后面的参数
@@ -64,7 +65,7 @@ class Route
                 $this->module = $route['DEFAULT_MODULE'];
             }
             $_GET['m']=$this->module;
-            $_GPC['m']=$this->module;
+
             unset($path[0]);
             if (isset($path[1]) && $path[1]) {
                 $this->ctrl = $path[1];
@@ -113,9 +114,11 @@ class Route
 
         } else {
 
-            $this->module = conf::get('DEFAULT_MODULE', 'route');
-            $this->ctrl = conf::get('DEFAULT_CTRL', 'route');
-            $this->action = conf::get('DEFAULT_ACTION', 'route');
+            $this->module=isset($_GPC['m']) ? $_GPC['m'] : conf::get('DEFAULT_MODULE', 'route');
+            $this->ctrl=isset($_GPC['c']) ?  $_GPC['c'] : conf::get('DEFAULT_CTRL', 'route');
+            $this->action=isset($_GPC['a']) ? $_GPC['a'] : conf::get('DEFAULT_ACTION', 'route');
+
+
         }
 
     }

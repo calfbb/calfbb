@@ -55,12 +55,13 @@ class Calfbb
 
             $this->pathTwo($request);
             $this->globalDefined();//加载配置
-        }else if($request->route['PATH_INFO']==3 && @(!isset($_GET['m']))){
+        }else if($request->route['PATH_INFO']==3){
 
             $this->pathThree($request);
             $this->globalDefined();//加载配置
-            return ;
+
         }else {
+
             $this->pathOne($request);
             $this->globalDefined();//加载配置
 
@@ -131,7 +132,7 @@ class Calfbb
         $this->action = $request->action;
         //系统默认目录
 
-         $this->ctrlFile = CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
+          $this->ctrlFile = CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
 
 
     }
@@ -165,7 +166,7 @@ class Calfbb
     }
 
     /**
-     * pathinfo  3 api开发模式  使用／带参数
+     * pathinfo  3 兼容模式
      */
 
     public  function pathThree($request){
@@ -179,9 +180,16 @@ class Calfbb
 
         }
 
-        $view=new \Framework\library\Views;
+        $this->ctrlClass = '\\' . $this->moduleName . '\controller\\' . ucwords($request->ctrl) ;
 
-        $view->display($request->ctrl.'/'.$request->action);
+        $this->action = $request->action;
+        //系统默认目录
+
+        $this->ctrlFile =CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
+
+       // $view=new \Framework\library\Views;
+
+      //  $view->display($request->ctrl.'/'.$request->action);
 
 
     }
@@ -236,10 +244,6 @@ class Calfbb
 
         $_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.\Framework\library\conf::get('attachdir', 'file');
 
-        //判断是否开启独立配置
-        if(@$_G['config']['CONFIG_STATUS']){
-            \Framework\library\conf::indepConfig();
-        }
     }
 
 }
