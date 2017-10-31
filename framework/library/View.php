@@ -4,7 +4,7 @@ namespace  framework\library;
 
 trait View 
 {
-    public $assign="";
+    public $assign=[];
     /**
      * 初始化产量
      */
