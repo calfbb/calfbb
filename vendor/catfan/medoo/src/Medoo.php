@@ -391,19 +391,19 @@ class Medoo
 			{
 				preg_match('/(?<column>[a-zA-Z0-9_\.*]+)(?:\s*\((?<alias>[a-zA-Z0-9_]+)\)|\s*\[(?<type>(String|Bool|Int|Number|Object|JSON))\])?/i', $value, $match);
 
-				if (!empty($match[ 'alias' ]))
-				{
-				    //弃用验证
-					//$stack[] = $this->columnQuote( $match[ 'column' ] ) . ' AS ' . $this->columnQuote( $match[ 'alias' ] );
-                    $stack[] = $this->tableQuote($match[ 'column' ])  . ' AS ' .  $match[ 'alias' ] ;
+                if (!empty($match[ 'alias' ]))
+                {
+                    //弃用验证
+                    //$stack[] = $this->columnQuote( $match[ 'column' ] ) . ' AS ' . $this->columnQuote( $match[ 'alias' ] );
+                    $stack[] = $match[ 'column' ]  . ' AS ' .  $match[ 'alias' ] ;
 
                     $columns[ $key ] = $match[ 'alias' ];
-				}
-				else
-				{
+                }
+                else
+                {
 
-					$stack[] = $this->tableQuote($match[ 'column' ]) ;
-				}
+                    $stack[] = $match[ 'column' ];
+                }
 			}
 
 		}

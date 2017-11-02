@@ -530,6 +530,22 @@ class Validator {
         return $this;
     }
 
+
+    /**
+     * 验证http||https请求方式
+     *
+     * @param string|array $action
+     * @param string $message
+     * @return Validator
+     */
+//    public function request($action, $message = null) {
+//        $this->setRule(__FUNCTION__, function($val) {
+//            return (strlen(trim($val)) === 0 || filter_var($val, FILTER_VALIDATE_IP) !== FALSE);
+//        }, $message);
+//        return $this;
+//    }
+
+
     // --------------- END [ADD NEW RULE FUNCTIONS ABOVE THIS LINE] ------------
 
     /**
@@ -575,6 +591,9 @@ class Validator {
 
         return $this;
     }
+
+
+
 
     // ------------------ PRE VALIDATION FILTERING -------------------
     /**

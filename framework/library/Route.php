@@ -50,7 +50,7 @@ class Route
         global $_GPC;
 
 
-        if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']) {
+        if ((isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']) || ($_SERVER['REQUEST_URI'] && $_SERVER['REQUEST_URI'] !="/")) {
             $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
 
             //丢掉?以及后面的参数
@@ -65,7 +65,7 @@ class Route
                 $this->module = $route['DEFAULT_MODULE'];
             }
             $_GET['m']=$this->module;
-
+            $_GPC['m']=$this->module;
             unset($path[0]);
             if (isset($path[1]) && $path[1]) {
                 $this->ctrl = $path[1];
