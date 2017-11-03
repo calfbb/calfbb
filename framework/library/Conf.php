@@ -94,17 +94,19 @@ class Conf
         if(is_file($config)) {
             self::$conf['config'] = array_merge(self::$conf['config'],include $config);
             $_G['config']=self::$conf['config'];
-            return self::$conf['config'];
+            self::$conf['config'];
         }
 
         if(is_file($database)) {
             self::$conf['database'] = array_merge(self::$conf['database'],include $database);
             $_G['database']=self::$conf['database'];
-            return self::$conf['config'];
+            self::$conf['database'];
         }
-
-        return false;
-
+        if(self::$conf){
+            return self::$conf;
+        }else{
+            return false;
+        }
 
     }
 }

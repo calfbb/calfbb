@@ -244,6 +244,10 @@ class Calfbb
 
         $_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.\Framework\library\conf::get('attachdir', 'file');
 
+        //判断是否开启独立配置
+        if($_G['config']['CONFIG_STATUS']){
+            \Framework\library\conf::indepConfig();
+        }
     }
 
 }
