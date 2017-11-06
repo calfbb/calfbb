@@ -243,6 +243,8 @@ class Medoo
 
 	public function query($query, $map = [])
 	{
+
+
 		if (!empty($map))
 		{
 			foreach ($map as $key => $value)
@@ -273,7 +275,21 @@ class Medoo
 			}
 		}
 
-		return $this->exec($query, $map);
+        $statement= $this->exec($query, $map);
+
+
+        $arrayResult=$statement->fetchAll(PDO::FETCH_CLASS);
+        if(is_array($arrayResult) && !empty($arrayResult)){
+            foreach ($arrayResult as $key=>$value){
+                $arrayResult[$key]=(array)$value;
+            }
+            return $arrayResult;
+
+        }else{
+
+            return $statement->rowCount();
+
+        }
 	}
 
 	public function exec($query, $map = [])
