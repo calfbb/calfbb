@@ -218,36 +218,29 @@ class Calfbb
      */
     public function globalDefined(){
         global $_G;
-         $moduleName=str_replace('\\', '/', $this->moduleName);
-         define('ATTACHMENT_ROOT', CALFBB .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径
-         define('APP', CALFBB . '/'.$moduleName.'/');//定义当前模块绝对路径
-         define('MODULE', $moduleName);//定义当前模块名
+        define('ATTACHMENT_ROOT', CALFBB .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径
+        define('APP', CALFBB . '/'.$this->moduleName.'/');//定义当前模块绝对路径
+        define('MODULE', $this->moduleName);//定义当前模块名
 
-        if($_G['config']['HTTP']){
-            if(!empty($_G['config']['MASTER'])){
-                define('APP_URL',$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].$this->module.'/index.php');
-
-            }else{
-                define('APP_URL',$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/index.php');
-
+        /**
+         * 路由处理
+         */
+        $scriptName=explode('/',$_SERVER['SCRIPT_NAME']);
+        //unset($s[0]);
+        array_shift($scriptName);
+        array_pop($scriptName);
+        $scriptUrl="";
+        if(!empty($scriptName)){
+            foreach($scriptName as $v){
+                $scriptUrl.="/".$v;
             }
-        }else{
-            define('APP_URL','./index.php');
         }
-
+        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https' : 'http';
+        define('APP_URL',$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/index.php');
         $_G['APP_URL']=APP_URL;
-        if(!empty($_G['config']['MASTER'])){
-            $_G['APP']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.$this->module;
-        }else{
-            $_G['APP']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/';
-        }
+        $_G['APP']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.str_replace('\\', '/', $this->moduleName);
+        $_G['ATTACHMENT_ROOT']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.\Framework\library\conf::get('attachdir', 'file');
 
-        $_G['ATTACHMENT_ROOT']=$_G['config']['HTTP']."://".$_SERVER['HTTP_HOST'].'/'.\Framework\library\conf::get('attachdir', 'file');
-
-        //判断是否开启独立配置
-        if($_G['config']['CONFIG_STATUS']){
-            \Framework\library\conf::indepConfig();
-        }
     }
 
 }

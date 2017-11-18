@@ -22,6 +22,7 @@ class Index extends  User
      * @return string
      */
     public function index(){
+            global $_G;
 
         $this->display('index/index');
     }

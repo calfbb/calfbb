@@ -117,22 +117,41 @@ class File
      *            目标文件夹
      * @param array $filter
      *            需要过滤的文件类型
+     * @param array $type
+     *            复制文件类型 1目录 2文件
      */
-    public  function file_copy($src, $des, $filter)
+    public  function file_copy($src, $des, $filter,$type=1)
     {
-        $dir = opendir($src);
         @mkdir($des);
-        while (false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                if (is_dir($src . '/' . $file)) {
-                    file_copy($src . '/' . $file, $des . '/' . $file, $filter);
-                } elseif (!in_array(substr($file, strrpos($file, '.') + 1), $filter)) {
-                    copy($src . '/' . $file, $des . '/' . $file);
+        if($type==1){
+            $dir = opendir($src);
+            while (false !== ($file = readdir($dir))) {
+                if (($file != '.') && ($file != '..')) {
+                    if (is_dir($src . '/' . $file)) {
+                        file_copy($src . '/' . $file, $des . '/' . $file, $filter);
+                    } elseif (!in_array(substr($file, strrpos($file, '.') + 1), $filter)) {
+                        copy($src . '/' . $file, $des . '/' . $file);
+                    }
                 }
             }
+            closedir($dir);
+        }else{
+            if (is_dir($src)) {
+                file_copy($src , $des , $filter,1);
+            } elseif (!in_array(substr($src, strrpos($src, '.') + 1), $filter)) {
+                $dir=dirname($des); // 取得当前文件所在的绝对目录，结果：D:\www\
+                if(!file_exists($dir)){
+                    $this->mkdirs($dir);
+                    @chmod($dir, 755);
+                }
+
+                copy($src, $des);
+            }
         }
-        closedir($dir);
+
+        return true;
     }
+
 
     /**
      * 删除目录
@@ -735,22 +754,46 @@ class File
      * @param int $enforcement
      * @return array
      */
-    public function file_lists($filepath, $subdir = 1, $ex = '', $isdir = 0, $md5 = 0, $enforcement = 0)
+    public function file_lists($filepath, $subdir = 1, $ex = '', $isdir = 0, $md5 = 0, $enforcement = 0,$prefix="",$filtrate=[])
     {
+
         static $file_list = array();
         if ($enforcement)
             $file_list = array();
         $flags = $isdir ? GLOB_ONLYDIR : 0;
         $list = glob($filepath . '*' . (!empty($ex) && empty($subdir) ? '.' . $ex : ''), $flags);
+
         if (!empty($ex))
             $ex_num = strlen($ex);
+
         foreach ($list as $k => $v) {
+
             $v = str_replace('\\', '/', $v);
-            $v1 = str_replace(IA_ROOT . '/', '', $v);
+
+            $v1 = str_replace( CALFBB. '/', '', $v);
+
             if ($subdir && is_dir($v)) {
-                file_lists($v . '/', $subdir, $ex, $isdir, $md5);
+                $this->file_lists($v . '/', $subdir, $ex, $isdir, $md5, $enforcement,$prefix,$filtrate);
                 continue;
             }
+            //判断是否需要删除前缀
+            if($prefix){
+                $v1 = str_replace($prefix, '', $v1);
+            }
+            //判断返回文件列表是否需要过滤不需要文件
+            if(!empty($filtrate)){
+                foreach ($filtrate as $fkey){
+                    $fileEx=strtolower(substr(strrchr($v1,"."),1));
+                    if($fileEx === $fkey){
+
+                        $v1="";
+                    }
+                }
+                if($v1==""){
+                    continue;
+                }
+            }
+
             if (!empty($ex) && strtolower(substr($v, -$ex_num, $ex_num)) == $ex) {
 
                 if ($md5) {
@@ -762,11 +805,15 @@ class File
             } elseif (!empty($ex) && strtolower(substr($v, -$ex_num, $ex_num)) != $ex) {
                 unset($list[$k]);
                 continue;
+            }else{
+
+
+                $file_list[] = $v1;
             }
         }
+
         return $file_list;
     }
-
     /**
      * 获取远程素材
      *

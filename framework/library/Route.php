@@ -117,7 +117,9 @@ class Route
             $this->module=isset($_GPC['m']) ? $_GPC['m'] : conf::get('DEFAULT_MODULE', 'route');
             $this->ctrl=isset($_GPC['c']) ?  $_GPC['c'] : conf::get('DEFAULT_CTRL', 'route');
             $this->action=isset($_GPC['a']) ? $_GPC['a'] : conf::get('DEFAULT_ACTION', 'route');
-
+            $_GPC['m']=$this->module;
+            $_GPC['c']=$this->ctrl;
+            $_GPC['a']=$this->action;
 
         }
 
