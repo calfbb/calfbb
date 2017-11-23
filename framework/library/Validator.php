@@ -253,7 +253,8 @@ class Validator {
     public function betweenlength($minlength, $maxlength, $message = null) {
         $message = empty($message) ? self::_getDefaultMessage(__FUNCTION__, array($minlength, $maxlength)) : NULL;
 
-        $this->minlength($minlength, $message)->max($maxlength, $message);
+        $this->minlength($minlength, $message)->maxlength($maxlength, $message);
+
         return $this;
     }
 
@@ -544,8 +545,34 @@ class Validator {
 //        }, $message);
 //        return $this;
 //    }
+//    protected function registerError($rule, $key, $message = null) {
+//        if (empty($message)) {
+//            $message = $this->messages[$rule];
+//        }
+//
+//        $this->errors[$key] = sprintf($message, $this->fields[$key]);
+//    }
 
+    /**
+     * 验证action请求方式
+     *
+     * @param string|array $action 默认GET
+     * @param string $message
+     * @return Validator
+     */
+    public function requestMethod($action='GET',$message=null) {
 
+        if($_SERVER['REQUEST_METHOD'] !==(string)trim($action)){
+            $this->fields=['action'=>$message];
+            $this->setRule(__FUNCTION__, function($val, $args) {
+
+        }, $message, array($action));
+
+            $this->registerError(__FUNCTION__,'action',$message);
+        }
+
+        return $this;
+    }
     // --------------- END [ADD NEW RULE FUNCTIONS ABOVE THIS LINE] ------------
 
     /**
@@ -867,17 +894,17 @@ class Validator {
                 break;
 
             case 'min':
-                $message = '%s must be greater than ';
+                $message = '%s 必须大于 ';
                 if ($args[1] == TRUE) {
-                    $message .= 'or equal to ';
+                    $message .= '或者等于 ';
                 }
                 $message .= $args[0] . '.';
                 break;
 
             case 'max':
-                $message = '%s must be less than ';
+                $message = '%s 必须小于 ';
                 if ($args[1] == TRUE) {
-                    $message .= 'or equal to ';
+                    $message .= '或者等于 ';
                 }
                 $message .= $args[0] . '.';
                 break;
@@ -890,13 +917,16 @@ class Validator {
                 break;
 
             case 'minlength':
-                $message = '%s must be at least ' . $args[0] . ' characters or longer.';
+                $message = '%s 字符串长度必须小于或等于 ' . $args[0] ;
                 break;
 
             case 'maxlength':
-                $message = '%s must be no longer than ' . $args[0] . ' characters.';
+                $message = '%s 字符串长度必须大于或等于 ' . $args[0];
                 break;
-
+            case 'betweenlength':
+                
+                $message = '%s 字段长度必须大于等于 ' . $args[0] . ' 或者小于等于 ' . $args[1] . '.';
+                break;
             case 'length':
                 $message = '%s must be exactly ' . $args[0] . ' characters in length.';
                 break;
@@ -944,7 +974,9 @@ class Validator {
             case 'ccnum':
                 $message = '%s must be a valid credit card number.';
                 break;
-
+            case 'requestMethod':
+                $message = '%s 请求方式错误,该请求方式不是'.$args[0];
+                break;
             default:
                 $message = '%s has an error.';
                 break;
