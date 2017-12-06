@@ -17,14 +17,17 @@ class Route
     public function __construct()
     {
         $route = conf::all('route');
-        $route['ADDONS'] = conf::get('ADDONS','config');
         $this->route=$route;
-        $this->addons=$route['ADDONS'];
-        //如果路由是第二种跟第三种模式
-        if($route['PATH_INFO']==2 || $route['PATH_INFO']==3){
+        $this->addons=$route['DEFAULT_ADDONS'];
+
+        //如果路由是第二种模式
+        if($route['PATH_INFO']==2){
             $this->pathinfoTwo($route);
 
+        }else if($route['PATH_INFO']==3 && isset($_SERVER['PATH_INFO'])){ //如果路由是第三种模式
+            $this->pathinfoTwo($route);
         }else{ //如果路由是第一种模式
+
             $this->pathinfoOne($route);
         }
 
@@ -49,12 +52,11 @@ class Route
     {
         global $_GPC;
 
-
-        if ((isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']) || ($_SERVER['REQUEST_URI'] && $_SERVER['REQUEST_URI'] !="/")) {
+        if (isset($_SERVER['REQUEST_URI'])) {
             $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
 
             //丢掉?以及后面的参数
-           $path = explode('?', $pathStr);
+            $path = explode('?', $pathStr);
 
             //去掉多余的分隔符
             $path = explode('/', trim($path[0], '/'));
@@ -114,13 +116,9 @@ class Route
 
         } else {
 
-            $this->module=isset($_GPC['m']) ? $_GPC['m'] : conf::get('DEFAULT_MODULE', 'route');
-            $this->ctrl=isset($_GPC['c']) ?  $_GPC['c'] : conf::get('DEFAULT_CTRL', 'route');
-            $this->action=isset($_GPC['a']) ? $_GPC['a'] : conf::get('DEFAULT_ACTION', 'route');
-            $_GPC['m']=$this->module;
-            $_GPC['c']=$this->ctrl;
-            $_GPC['a']=$this->action;
-
+            $this->module = conf::get('DEFAULT_MODULE', 'route');
+            $this->ctrl = conf::get('DEFAULT_CTRL', 'route');
+            $this->action = conf::get('DEFAULT_ACTION', 'route');
         }
 
     }

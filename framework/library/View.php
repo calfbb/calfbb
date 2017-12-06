@@ -31,12 +31,12 @@ trait View
     public function display($file,$module="")
     {
         global $_G;
-
-        if($_G['config']['TPL_STATUS']==true){//如果开启模版机制
+        $route=\Framework\library\conf::all('route');
+        if($route['TPL_STATUS']==true){//如果开启模版机制
 
             $module= $module !="" ? $module  : CALFBB;
             $module=str_replace('\\', '/', $module);
-            $module=$module .'/'.$_G['config']['TPL'].'/'.$_G['config']['TPL_DEFAULT']. '/';
+            $module=$module .'/'.$route['TPL'].'/'.$route['TPL_DEFAULT']. '/';
         }else{
             $module= $module !="" ? $module  : APP;
             $module=str_replace('\\', '/', $module);

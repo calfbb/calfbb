@@ -54,23 +54,22 @@ class Calfbb
         if($request->route['PATH_INFO']==2){
 
             $this->pathTwo($request);
-            $this->globalDefined();//加载配置
+            $this->globalDefined($request);//加载配置
         }else if($request->route['PATH_INFO']==3){
 
             $this->pathThree($request);
-            $this->globalDefined();//加载配置
+            $this->globalDefined($request);//加载配置
 
         }else {
 
             $this->pathOne($request);
-            $this->globalDefined();//加载配置
+            $this->globalDefined($request);//加载配置
 
         }
         \Framework\library\Log::init();//初始化日志
 
         include_once CORE .'functions/string.php';
         include_once CORE .'functions/database.php';
-        include_once CORE .'functions/code.php';
         //此函数加载需要上配置文件之下
         include_once CORE .'functions/function.php';
         // 开始替换\为/
@@ -116,10 +115,9 @@ class Calfbb
 
     public  function pathOne($request){
         global $_G;
-
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if (@$_GET['m'] !=$request->route['DEFAULT_MODULE'] && @isset($_GET['m'])) {
-            $this->moduleName = $request->route['ADDONS'].'\\'.$_GET['m'];
+            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$_GET['m'];
 
         } else {
 
@@ -132,7 +130,7 @@ class Calfbb
         $this->action = $request->action;
         //系统默认目录
 
-          $this->ctrlFile = CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
+        $this->ctrlFile = CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
 
 
     }
@@ -145,7 +143,7 @@ class Calfbb
 
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if ($request->module != $request->route['DEFAULT_MODULE']) {
-            $this->moduleName = $request->route['ADDONS'].'\\'.$request->module;
+            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$request->module;
 
         } else {
 
@@ -172,7 +170,7 @@ class Calfbb
     public  function pathThree($request){
         //如果是多模块,可以通过动态设置module的形式,动态条用不同模块
         if ($request->module != $request->route['DEFAULT_MODULE']) {
-            $this->moduleName = $request->route['ADDONS'].'\\'.$request->module;
+            $this->moduleName = $request->route['DEFAULT_ADDONS'].'\\'.$request->module;
 
         } else {
 
@@ -187,10 +185,7 @@ class Calfbb
 
         $this->ctrlFile =CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
 
-       // $view=new \Framework\library\Views;
-
-      //  $view->display($request->ctrl.'/'.$request->action);
-
+        $this->ctrlFile;
 
     }
 
@@ -201,14 +196,14 @@ class Calfbb
     public static function loadFunc($func)
     {
 
-            if (is_file(CALFBB . '/' . $func . '.php')) {
+        if (is_file(CALFBB . '/' . $func . '.php')) {
 
-                include_once CORE .'function/'.$func.'.php';
+            include_once CORE .'function/'.$func.'.php';
 
-            }else{
+        }else{
 
 //                CORE .'function/'.$func.'.php'
-            }
+        }
 
 
     }
@@ -216,7 +211,7 @@ class Calfbb
     /**
      * 全局配置函数
      */
-    public function globalDefined(){
+    public function globalDefined($request){
         global $_G;
         define('ATTACHMENT_ROOT', CALFBB .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径
         define('APP', CALFBB . '/'.$this->moduleName.'/');//定义当前模块绝对路径
@@ -240,6 +235,11 @@ class Calfbb
         $_G['APP_URL']=APP_URL;
         $_G['APP']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.str_replace('\\', '/', $this->moduleName);
         $_G['ATTACHMENT_ROOT']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.\Framework\library\conf::get('attachdir', 'file');
+
+        //是否开启独立配置文件
+        if($request->route['CONFIG_STATUS']){
+            \Framework\library\conf::indepConfig(str_replace('\\', '/', APP));
+        }
 
     }
 

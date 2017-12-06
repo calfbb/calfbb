@@ -52,7 +52,7 @@ spl_autoload_register('\framework\Calfbb::load');
 date_default_timezone_set(\Framework\library\Conf::get('TIMEZONE','system'));
 
 //定义是否开启调试模式
-define('DEBUG',\Framework\library\Conf::get('DEBUG','system'));//调试模式
+define('DEBUG',\Framework\library\Conf::get('DEBUG','config'));//调试模式
 //错误提示
 if(DEBUG) {
 

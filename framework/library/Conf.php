@@ -87,10 +87,11 @@ class Conf
      * 判断应用是否有单独配置文件
      *
      */
-    static function indepConfig(){
+    static function indepConfig($appPath){
         global $_G;
-        $config = APP.'config.php';
-        $database = APP.'database.php';
+
+        $config = $appPath.'config.php';
+        $database = $appPath.'database.php';
         if(is_file($config)) {
             self::$conf['config'] = array_merge(self::$conf['config'],include $config);
             $_G['config']=self::$conf['config'];

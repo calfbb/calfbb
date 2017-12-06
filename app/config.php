@@ -9,7 +9,7 @@
 
 //独立配置文件
 return array(
-//    'TPL_DEFAULT'=>'bootstrap2',//模板的默认目录
+    'TPL_DEFAULT'=>'bootstrap',//模板的默认目录
 //    'TPL_STATUS'=>true,//是否替换主应用模版，开启后程序将从TPL目录下调用模版
 //
 );

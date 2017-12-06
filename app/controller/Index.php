@@ -25,10 +25,8 @@ class Index extends User
 
     public function test()
     {
-        global $_GPC;
-        $m=$this->validate();
-        p($m);
-        // $this->display('index/index');
+        global $_GPC,$_G;
+
 
     }
 

@@ -924,7 +924,7 @@ class Validator {
                 $message = '%s 字符串长度必须大于或等于 ' . $args[0];
                 break;
             case 'betweenlength':
-                
+
                 $message = '%s 字段长度必须大于等于 ' . $args[0] . ' 或者小于等于 ' . $args[1] . '.';
                 break;
             case 'length':
