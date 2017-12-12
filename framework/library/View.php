@@ -2,21 +2,9 @@
 
 namespace  framework\library;
 
-trait View 
+trait View
 {
     public $assign=[];
-    /**
-     * 初始化产量
-     */
-    public function __construct()
-    {
-        global $_G,$_GPC;
-        $this->assign['_G']=$_G;
-        $this->assign['_GPC']=$_GPC;
-        $this->assign['APP_URL']=$_G['APP_URL'];
-        $this->assign['APP']=$_G['APP'];
-    }
-
     /**
      * 为模板对象赋值
      */
@@ -30,7 +18,17 @@ trait View
      */
     public function display($file,$module="")
     {
-        global $_G;
+        global $_G,$_GPC;
+        /**
+         * 初始化常量
+         */
+        $this->assign['_G']=$_G;
+        $this->assign['_GPC']=$_GPC;
+        $this->assign['APP_URL']=$_G['APP_URL'];
+        $this->assign['APP']=$_G['APP'];
+        /**
+         * 配置路由
+         */
         $route=\Framework\library\conf::all('route');
         if($route['TPL_STATUS']==true){//如果开启模版机制
 
@@ -47,7 +45,7 @@ trait View
             \Twig_Autoloader::register();
             $loader = new \Twig_Loader_Filesystem($module);
             $twig = new \Twig_Environment($loader, [
-                'cache' => CALFBB . '/data/cache/'.MODULE.'/template',
+                'cache' => CALFBB . '/data/cache/'.str_replace('\\', '/', MODULE).'/template',
                 'debug' => DEBUG,
             ]);
 

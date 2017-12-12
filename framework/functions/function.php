@@ -158,31 +158,30 @@ function webUrl($segment, $params = array()){
 
 /**
  * 构造错误数组
- * @param int $errno 错误码，0为无任何错误
+ * @param int $code 错误码
  * @param string $message 错误信息
  * @param mixed $data 返回数据结果
  * @return array
  */
-function error($errno, $message = ''){
+function error($code, $data='',$message = 'error'){
     return array(
-        'errno' => $errno,
+        'code' => $code,
         'message' => $message,
+        'data'=>$data
     );
 }
 
-
 /**
- * 跳转信息提示
+ * 构造成功数组
+ * @param int $code 成功码
+ * @param string $message 成功信息
+ * @param mixed $data 返回数据结果
+ * @return array
  */
-function message($message,$url,$time=3){
-    global $_GPC;
-    $class=new  \Framework\library\views;
-    $class->assign('message',$message);
-    $class->assign('url',$url);
-    $class->assign('time',(int)$time);
-
-    $module= $_GPC['m'] !="web" ? CALFBB.'/web/' : '';
-
-    $class->display('common/message.html',$module);
-    exit;
+function success($code, $data='',$message = 'success'){
+    return array(
+        'code' => $code,
+        'message' => $message,
+        'data'=>$data
+    );
 }
