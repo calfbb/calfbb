@@ -48,7 +48,10 @@ trait View
                 'cache' => CALFBB . '/data/cache/'.str_replace('\\', '/', MODULE).'/template',
                 'debug' => DEBUG,
             ]);
-
+            // $text=new Text();
+            // $data=$text->url('asda');
+            // p($data);
+            $twig->addGlobal('G', new G());
             $template = $twig->loadTemplate($file.".html");
             $template->display($this->assign ? $this->assign : []);
         } else {
@@ -58,6 +61,41 @@ trait View
                 show404();
             }
         }
+    }
+}
+
+/** 模版引擎用于获取系统常量扩展
+ * Class G
+ * @package framework\library
+ */
+class G{
+    public $G;
+    public $GPC;
+    public $APP_URL;
+    public $APP;
+    public $ATTACHMENT_ROOT;
+    public $M;
+    public $C;
+    public $A;
+    public function __construct()
+    {
+        global $_G,$_GPC;
+        /**
+         * 初始化常量
+         */
+        $this->G=$_G;
+        $this->GPC=$_GPC;
+        $this->APP_URL=$_G['APP_URL'];
+        $this->APP=$_G['APP'];
+        $this->ATTACHMENT_ROOT=$_G['ATTACHMENT_ROOT'];
+        $this->M=M;
+        $this->C=C;
+        $this->A=A;
+    }
+
+    public function url($url,$param=[],$suffix=true){
+
+        return url($url);
     }
 }
 

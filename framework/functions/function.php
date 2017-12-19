@@ -8,30 +8,28 @@
  */
 function p($var)
 {
-    if (is_cli()) {
-        if (is_array($var) || is_object($var)) {
-            dump($var);
-        } else {
-            echo PHP_EOL;
-            echo "\e[31m" . $var . "\e[37m" . PHP_EOL;
-            echo PHP_EOL;
-        }
+
+
+    if (is_bool($var)) {
+        var_dump($var);
+    } else if (is_null($var)) {
+        var_dump(NULL);
     } else {
-        if (is_bool($var)) {
-            var_dump($var);
-        } else if (is_null($var)) {
-            var_dump(NULL);
-        } else {
-            echo "<pre style='position:relative;z-index:1000;padding:10px;border-radius:5px;background:#F5F5F5;border:1px solid #aaa;font-size:14px;line-height:18px;opacity:0.9;'>" . print_r($var, true) . "</pre>";
-        }
+        echo "<pre style='position:relative;z-index:1000;padding:10px;border-radius:5px;background:#F5F5F5;border:1px solid #aaa;font-size:14px;line-height:18px;opacity:0.9;'>" . print_r($var, true) . "</pre>";
     }
+
     exit;
 }
 
+
+/**输出json数据
+ * @param $array
+ */
 function show_json($array){
     header('Content-Type:application/json; charset=utf-8');
     echo json_encode($array);exit;
 }
+
 
 
 
@@ -40,72 +38,8 @@ function is_cli()
     return PHP_SAPI == 'cli';
 }
 
-/**
- * 获取get数据
- * @param string $str 变量名
- * @param string $filter 过滤方式 int为只支持int类型
- * @param string $default 默认值 当获取不到值时,所返回的默认值
- * @return mix
- */
-function get($str = 'false', $filter = '', $default = false)
-{
-    if ($str !== false) {
-        $return = isset($_GET[$str]) ? $_GET[$str] : false;
-        if ($return) {
-            switch ($filter) {
-                case 'int':
-                    if (!is_numeric($return)) {
-                        return $default;
-                    }
-                    break;
-                default:
-                    $return = htmlspecialchars($return);
 
-            }
-            return $return;
-        } else {
-            return $default;
-        }
-    } else {
-        return $_GET;
-    }
-}
 
-/**
- * 获取post数据
- * @param $str 变量名
- * @param $filter 过滤方式 int为只支持int类型
- * @param $default 默认值 当获取不到值时,所返回的默认值
- * @return mix
- */
-function post($str = false, $filter = '', $default = false)
-{
-    if ($str !== false) {
-        $return = isset($_POST[$str]) ? $_POST[$str] : false;
-        if ($return !== false) {
-            switch ($filter) {
-                case 'int':
-                    if (!is_numeric($return)) {
-                        return $default;
-                    }
-                    break;
-                default:
-                    $return = htmlspecialchars($return);
-
-            }
-            return $return;
-        } else {
-            return $default;
-        }
-    } else {
-        return $_POST;
-    }
-}
-
-function redirect($str)
-{
-    header('Location:' . $str);
-}
 
 function http_method()
 {
@@ -129,30 +63,15 @@ function show404()
     exit();
 }
 
-
-/** web url跳转
- * @param $segment
- * @param array $params
+/**
+ * URL生成
+ * @param string            $url 路由地址
+ * @param string|array      $param 参数（支持数组和字符串）a=val&b=val2... ['a'=>'val1', 'b'=>'val2']
+ * @param string|bool       $suffix 伪静态后缀，默认为true表示获取配置值
  * @return string
  */
-function webUrl($segment, $params = array()){
-
-
-    list($controller, $action) = explode('/', $segment);
-    $url = './index.php?m='.MODULE."&";
-    if (!empty($controller)) {
-        $url .= "c={$controller}&";
-    }
-    if (!empty($action)) {
-        $params['a']=$action;
-
-    }
-
-    if (!empty($params)) {
-        $queryString = http_build_query($params, '', '&');
-        $url .= $queryString;
-    }
-    return $url;
+function url($url,$param=[],$suffix=true){
+    return \Framework\library\Url::build($url,$param,$suffix);
 }
 
 
@@ -184,4 +103,21 @@ function success($code, $data='',$message = 'success'){
         'message' => $message,
         'data'=>$data
     );
+}
+
+
+if (!function_exists('getallheaders'))
+{
+    function getallheaders()
+    {
+        $headers = [];
+        foreach ($_SERVER as $name => $value)
+        {
+            if (substr($name, 0, 5) == 'HTTP_')
+            {
+                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+            }
+        }
+        return $headers;
+    }
 }

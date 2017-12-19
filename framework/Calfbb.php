@@ -72,6 +72,7 @@ class Calfbb
         include_once CORE .'functions/database.php';
         //此函数加载需要上配置文件之下
         include_once CORE .'functions/function.php';
+
         // 开始替换\为/
         $this->ctrlFile = str_replace('\\', '/', $this->ctrlFile);
 
@@ -103,10 +104,6 @@ class Calfbb
         }else{
             throw new \Exception($action . '是一个不存在的方法');
         }
-
-
-
-
     }
 
     /**
@@ -125,9 +122,10 @@ class Calfbb
 
         }
 
-        $this->ctrlClass = '\\' . $this->moduleName . '\controller\\' . ucwords($request->ctrl) ;
+
 
         $this->action = $request->action;
+        $this->ctrlClass = '\\' . $this->moduleName . '\controller\\' . ucwords($request->ctrl) ;
         //系统默认目录
 
         $this->ctrlFile = CALFBB . '/'.$this->moduleName.'/' . 'controller/' . ucwords($request->ctrl) . '.php';
@@ -200,12 +198,7 @@ class Calfbb
 
             include_once CORE .'function/'.$func.'.php';
 
-        }else{
-
-//                CORE .'function/'.$func.'.php'
         }
-
-
     }
 
     /**
@@ -213,15 +206,18 @@ class Calfbb
      */
     public function globalDefined($request){
         global $_G;
+        $moduleName=str_replace('\\', '/', $this->moduleName);
         define('ATTACHMENT_ROOT', CALFBB .'/'.\Framework\library\conf::get('attachdir', 'file').'/');//附件地址绝对路径
-        define('APP', CALFBB . '/'.$this->moduleName.'/');//定义当前模块绝对路径
-        define('MODULE', $this->moduleName);//定义当前模块名
-
+        define('APP', CALFBB . '/'.$moduleName.'/');//定义当前模块绝对路径
+        define('MODULE',$moduleName);//定义当前模块名
+        define('M',$request->module);//定义当前模块名
+        define('C',$request->ctrl);//定义当前模块名
+        define('A',$request->action);//定义当前模块名
         /**
          * 路由处理
          */
         $scriptName=explode('/',$_SERVER['SCRIPT_NAME']);
-        //unset($s[0]);
+
         array_shift($scriptName);
         array_pop($scriptName);
         $scriptUrl="";
@@ -231,14 +227,18 @@ class Calfbb
             }
         }
         $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https' : 'http';
-        define('APP_URL',$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/index.php');
+        $indexSuffix="";
+        if($request->route['IDENX_SUFFIX']==false){
+            $indexSuffix="/index.php";
+        }
+        define('APP_URL',$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.$indexSuffix);
         $_G['APP_URL']=APP_URL;
-        $_G['APP']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.str_replace('\\', '/', $this->moduleName);
+        $_G['APP']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.$moduleName;
         $_G['ATTACHMENT_ROOT']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.\Framework\library\conf::get('attachdir', 'file');
 
         //是否开启独立配置文件
         if($request->route['CONFIG_STATUS']){
-            \Framework\library\conf::indepConfig(str_replace('\\', '/', APP));
+            \Framework\library\conf::indepConfig(APP);
         }
 
     }

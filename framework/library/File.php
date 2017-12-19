@@ -53,7 +53,7 @@ class File
         if (is_uploaded_file($filename)) {
             move_uploaded_file($filename, $dest);
         } else {
-            $this->rename($filename, $dest);
+            rename($filename, $dest);
         }
         @chmod($filename, $_W['config']['setting']['filemode']);
         return is_file($dest);
@@ -429,11 +429,13 @@ class File
         }
         if (file_exists($file)) {
             @unlink($file);
+            return TRUE;
         }
         if (file_exists(ATTACHMENT_ROOT . '/' . $file)) {
             @unlink(ATTACHMENT_ROOT . '/' . $file);
+            return TRUE;
         }
-        return TRUE;
+        return FALSE;
     }
     /*
     public  function file_remote_delete($file)
@@ -563,7 +565,7 @@ class File
         if ($org_info) {
             if ($width == 0 || $width > $org_info[0]) {
                 copy($srcfile, $desfile);
-                return str_replace(ATTACHMENT_ROOT . '/', '', $desfile);
+                return  success(1,str_replace(ATTACHMENT_ROOT . '/', '', $desfile));
             }
             if ($org_info[2] == 1) { // gif不处理
                 if (function_exists("imagecreatefromgif")) {
@@ -738,7 +740,7 @@ class File
         }
         imagedestroy($img_dst);
         imagedestroy($img_org);
-        return success(1);
+        return success();
     }
 
     /**

@@ -21,13 +21,19 @@ class Route
         $this->addons=$route['DEFAULT_ADDONS'];
 
         //如果路由是第二种模式
-        if($route['PATH_INFO']==2){
-            $this->pathinfoTwo($route);
+        if($route['PATH_INFO']==2  && !isset($_GET['m'])){
+            $path=$this->analysisVar();
+            $this->pathinfoTwo($route,$path);
 
-        }else if($route['PATH_INFO']==3 && isset($_SERVER['PATH_INFO'])){ //如果路由是第三种模式
-            $this->pathinfoTwo($route);
+        }else if($route['PATH_INFO']==3){ //如果路由是第三种模式
+            $path=$this->analysisVar();
+            if(!empty($path) && !isset($_GET['m'])){
+                $this->pathinfoTwo($route,$path);
+            }else{
+                $this->pathinfoOne($route);
+            }
+
         }else{ //如果路由是第一种模式
-
             $this->pathinfoOne($route);
         }
 
@@ -35,37 +41,47 @@ class Route
 
     public function pathinfoOne($route)
     {
-        global $_G;
-        if (isset($_SERVER['QUERY_STRING'])) {
-
-            global $_GPC;
-            $this->module=isset($_GPC['m']) ? $_GPC['m'] : conf::get('DEFAULT_MODULE', 'route');
-            $this->ctrl=isset($_GPC['c']) ?  $_GPC['c'] : conf::get('DEFAULT_CTRL', 'route');
-            $this->action=isset($_GPC['a']) ? $_GPC['a'] : conf::get('DEFAULT_ACTION', 'route');
-
-
-
+        global $_G,$_GPC;
+        if(isset($_GPC['m'])){
+            $this->module=$_GPC['m'];
+        }else{
+            $this->module=conf::get('DEFAULT_MODULE', 'route');
+            $_GPC['m']=$this->module;
+            $_GET['m']=$this->module;
         }
+
+        if(isset($_GPC['c'])){
+            $this->ctrl=$_GPC['c'];
+        }else{
+            $this->ctrl=conf::get('DEFAULT_CTRL', 'route');
+            $_GPC['c']=$this->ctrl;
+            $_GET['c']=$this->ctrl;
+        }
+
+        if(isset($_GPC['a'])){
+            $this->action=$this->delSuffix($_GPC['a']);
+
+        }else{
+            $this->action=$this->delSuffix(conf::get('DEFAULT_ACTION', 'route'));
+            $_GPC['a']=$this->action;
+            $_GET['a']=$this->action;
+        }
+
+
+
     }
 
-    public function pathinfoTwo($route)
+    public function pathinfoTwo($route,$path)
     {
         global $_GPC;
 
         if (isset($_SERVER['REQUEST_URI'])) {
-            $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
-
-            //丢掉?以及后面的参数
-            $path = explode('?', $pathStr);
-
-            //去掉多余的分隔符
-            $path = explode('/', trim($path[0], '/'));
-
             if (isset($path[0]) && $path[0]) {
                 $this->module = $path[0];
             } else {
                 $this->module = $route['DEFAULT_MODULE'];
             }
+
             $_GET['m']=$this->module;
             $_GPC['m']=$this->module;
             unset($path[0]);
@@ -97,10 +113,13 @@ class Route
                     $this->action = $route['DEFAULT_ACTION'];
                 }
                 unset($path[2]);
-                $_GET['a']=$this->action;
-                $_GPC['a']=$this->action;
+
 
             }
+
+            $this->action=$this->delSuffix($this->action);
+            $_GET['a']=$this->action;
+            $_GPC['a']=$this->action;
 
             $this->path = array_merge($path);
 
@@ -118,10 +137,44 @@ class Route
 
             $this->module = conf::get('DEFAULT_MODULE', 'route');
             $this->ctrl = conf::get('DEFAULT_CTRL', 'route');
-            $this->action = conf::get('DEFAULT_ACTION', 'route');
+            $this->action = $this->delSuffix(conf::get('DEFAULT_ACTION', 'route'));
+            $_GPC['m']=$this->module;
+            $_GET['m']=$this->module;
+            $_GPC['c']=$this->ctrl;
+            $_GET['c']=$this->ctrl;
+            $_GPC['a']=$this->action;
+            $_GET['a']=$this->action;
         }
 
     }
+    /**
+     * 解析url参数
+     */
+    public function analysisVar(){
+        if(@isset($_SERVER['PATH_INFO'])){
+            $path=@trim($_SERVER['PATH_INFO'],'/');
+            $path=explode('/',$path);
+        }else{
+
+            $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI'],$count);
+            $pathStr2 = str_replace($_SERVER['REQUEST_URI'], '', $_SERVER['SCRIPT_NAME'],$count2);
+            $path=@trim($pathStr,'/');
+            if($count < 1 && $count2 > 0){
+                $path=[];
+            }else{
+                $path=explode('/',$path);
+            }
+        }
+
+        return $path;
+    }
+
+    /**
+     * @param      $num
+     * @param bool $default
+     *
+     * @return bool
+     */
     public function urlVar($num, $default = false)
     {
         if (isset($this->path[$num])) {
@@ -131,8 +184,18 @@ class Route
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function method()
     {
         return $_SERVER['REQUEST_METHOD'];
+    }
+
+    /**
+     * 删除后缀
+     */
+    public function delSuffix($action){
+        return explode('.',$action)[0];
     }
 }

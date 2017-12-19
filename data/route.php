@@ -10,4 +10,9 @@ return array(
     'TPL_DEFAULT'=>'bootstrap',//模板的默认目录
     'TPL_STATUS'=>false,//是否替换应用模版，开启后程序将从TPL目录下调用模版
     'CONFIG_STATUS'=>true,//是否开启模块独立配置文件，开启后模块下的config.php的配置将覆盖data下的配置文件
+    'SUFFIX'=>'.html',//伪静态后缀名
+    'SUFFIX_STATUS'=>true,//是否开启伪静态是加后缀
+    'IDENX_SUFFIX'=>false,//APP_URL(获取完整模块url)中是否隐藏index.php false 不隐藏
+    //特别说明：IDENX_SUFFIX用于支持伪静态,网站不可配置在二级目录中 如http://test.calfbbs.com/calfbbs/index.php
+
 );
