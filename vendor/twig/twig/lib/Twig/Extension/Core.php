@@ -997,8 +997,17 @@ function twig_escape_filter(Twig_Environment $env, $string, $strategy = 'html', 
     if (null === $charset) {
         $charset = $env->getCharset();
     }
+    /**
+     * 检查是否是一个完整的url  解决url生成有&amp bug问题
+     */
+
+    if((strlen(trim($string)) === 0 || filter_var($string, FILTER_VALIDATE_URL) !== FALSE)){
+        $strategy="url_attr";
+    }
 
     switch ($strategy) {
+        case 'url_attr':
+            return $string;
         case 'html':
             // see http://php.net/htmlspecialchars
 
@@ -1036,7 +1045,7 @@ function twig_escape_filter(Twig_Environment $env, $string, $strategy = 'html', 
             $string = twig_convert_encoding($string, 'UTF-8', $charset);
             $string = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-            return twig_convert_encoding($string, $charset, 'UTF-8');
+             twig_convert_encoding($string, $charset, 'UTF-8');
 
         case 'js':
             // escape all non-alphanumeric characters

@@ -42,30 +42,30 @@ class Route
     public function pathinfoOne($route)
     {
         global $_G,$_GPC;
-        if(isset($_GPC['m'])){
-            $this->module=$_GPC['m'];
-        }else{
-            $this->module=conf::get('DEFAULT_MODULE', 'route');
-            $_GPC['m']=$this->module;
-            $_GET['m']=$this->module;
-        }
+            if(isset($_GPC['m'])){
+                $this->module=$_GPC['m'];
+            }else{
+                $this->module=conf::get('DEFAULT_MODULE', 'route');
+                $_GPC['m']=$this->module;
+                $_GET['m']=$this->module;
+            }
 
-        if(isset($_GPC['c'])){
-            $this->ctrl=$_GPC['c'];
-        }else{
-            $this->ctrl=conf::get('DEFAULT_CTRL', 'route');
-            $_GPC['c']=$this->ctrl;
-            $_GET['c']=$this->ctrl;
-        }
+            if(isset($_GPC['c'])){
+                $this->ctrl=$_GPC['c'];
+            }else{
+                $this->ctrl=conf::get('DEFAULT_CTRL', 'route');
+                $_GPC['c']=$this->ctrl;
+                $_GET['c']=$this->ctrl;
+            }
 
-        if(isset($_GPC['a'])){
-            $this->action=$this->delSuffix($_GPC['a']);
+            if(isset($_GPC['a'])){
+                $this->action=$this->delSuffix($_GPC['a']);
 
-        }else{
-            $this->action=$this->delSuffix(conf::get('DEFAULT_ACTION', 'route'));
-            $_GPC['a']=$this->action;
-            $_GET['a']=$this->action;
-        }
+            }else{
+                $this->action=$this->delSuffix(conf::get('DEFAULT_ACTION', 'route'));
+                $_GPC['a']=$this->action;
+                $_GET['a']=$this->action;
+            }
 
 
 
@@ -120,10 +120,16 @@ class Route
             $this->action=$this->delSuffix($this->action);
             $_GET['a']=$this->action;
             $_GPC['a']=$this->action;
-
             $this->path = array_merge($path);
 
             $pathLenth = count($path);
+            /**
+             * 最后一尾参数去掉后缀
+             */
+            if(@isset($this->path[$pathLenth-1])){
+                $this->path[$pathLenth-1]=$this->delSuffix($this->path[$pathLenth-1]);
+            }
+
             $i = 0;
             while ($i < $pathLenth) {
                 if (isset($this->path[$i + 1])) {
@@ -151,20 +157,15 @@ class Route
      * 解析url参数
      */
     public function analysisVar(){
-        if(@isset($_SERVER['PATH_INFO'])){
-            $path=@trim($_SERVER['PATH_INFO'],'/');
-            $path=explode('/',$path);
-        }else{
-
             $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI'],$count);
             $pathStr2 = str_replace($_SERVER['REQUEST_URI'], '', $_SERVER['SCRIPT_NAME'],$count2);
-            $path=@trim($pathStr,'/');
+            $path=@trim($pathStr,'?');
+            $path=@trim($path,'/');
             if($count < 1 && $count2 > 0){
                 $path=[];
             }else{
-                $path=explode('/',$path);
+                $path = explode('/', $path);
             }
-        }
 
         return $path;
     }
@@ -196,6 +197,11 @@ class Route
      * 删除后缀
      */
     public function delSuffix($action){
-        return explode('.',$action)[0];
+        $route = conf::all('route');
+        if($route['SUFFIX_STATUS']){
+            $action=str_replace($route['SUFFIX'],'',$action);
+        }
+        return $action;
+
     }
 }

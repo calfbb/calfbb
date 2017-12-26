@@ -5,7 +5,7 @@
  * @author:calfbb技术团队
  * Date: 2017/10/13
  */
-session_start();
+
 header("Content-type:text/html;charset=utf-8");
 $_G = $_GPC = array();
 //合并get  与post请求
