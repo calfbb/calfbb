@@ -237,7 +237,7 @@ class Medoo
             }
         }
         catch (PDOException $e) {
-            throw new Exception($e->getMessage());
+            throw new Exception("数据库链接失败".$e->getMessage());
         }
     }
 

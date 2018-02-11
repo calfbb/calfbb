@@ -1045,7 +1045,7 @@ function twig_escape_filter(Twig_Environment $env, $string, $strategy = 'html', 
             $string = twig_convert_encoding($string, 'UTF-8', $charset);
             $string = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-             twig_convert_encoding($string, $charset, 'UTF-8');
+            twig_convert_encoding($string, $charset, 'UTF-8');
 
         case 'js':
             // escape all non-alphanumeric characters
@@ -1092,7 +1092,7 @@ function twig_escape_filter(Twig_Environment $env, $string, $strategy = 'html', 
                 throw new Twig_Error_Runtime('The string to escape is not a valid UTF-8 string.');
             }
 
-            $string = preg_replace_callback('#[^a-zA-Z0-9,\.\-_]#Su', '_twig_escape_html_attr_callback', $string);
+            // $string = preg_replace_callback('#[^a-zA-Z0-9,\.\-_]#Su', '_twig_escape_html_attr_callback', $string);
 
             if ('UTF-8' !== $charset) {
                 $string = twig_convert_encoding($string, $charset, 'UTF-8');

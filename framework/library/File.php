@@ -17,24 +17,32 @@ class File
      *            写入数据
      * @return boolean
      */
-    public  function file_write($filename, $data)
+    public  function file_write($filename, $data,$filemode=0755)
     {
-        global $_W;
-        $filename = CALFBB . '/' . $filename;
+        global $_G;
+
         $this->mkdirs(dirname($filename));
+
         file_put_contents($filename, $data);
-        @chmod($filename, $_W['config']['setting']['filemode']);
+
+        @chmod($filename, $filemode);
         return is_file($filename);
     }
 
     public  function file_read($filename)
     {
-        global $_W;
-        $filename = ATTACHMENT_ROOT . '/' . $filename;
-        if (!is_file($filename)) {
-            return false;
+        if (is_file($filename)) {
+            return file_get_contents($filename);
+
         }
-        return file_get_contents($filename);
+        $filename = ATTACHMENT_ROOT . '/' . $filename;
+        if (is_file($filename)) {
+            return file_get_contents($filename);
+
+        }
+
+        return false;
+
     }
 
     /**
@@ -251,7 +259,7 @@ class File
         if (! $this->file_move($file['tmp_name'], ATTACHMENT_ROOT . '/' . $result)) {
             return error(-1, '保存上传文件失败');
         }
-
+        @chmod(ATTACHMENT_ROOT . '/' . $result, 0755);
         return success(1,$result);
     }
 
@@ -607,6 +615,7 @@ class File
 
         imagedestroy($img_dst);
         imagedestroy($img_org);
+        @chmod($desfile, 0755);
         return success(1,str_replace(ATTACHMENT_ROOT . '/', '', $desfile));
 
     }
@@ -765,14 +774,16 @@ class File
         if ($enforcement)
             $file_list = array();
         $flags = $isdir ? GLOB_ONLYDIR : 0;
-        $list = glob($filepath . '*' . (!empty($ex) && empty($subdir) ? '.' . $ex : ''), $flags);
+        $list = glob($filepath ."/". '*' . (!empty($ex) && empty($subdir) ? '.' . $ex : ''), $flags);
         if (!empty($ex))
             $ex_num = strlen($ex);
+
         foreach ($list as $k => $v) {
             $v = str_replace('\\', '/', $v);
-            $v1 = str_replace(IA_ROOT . '/', '', $v);
+            $v1 = str_replace($filepath . '/', '', $v);
+
             if ($subdir && is_dir($v)) {
-                file_lists($v . '/', $subdir, $ex, $isdir, $md5);
+                $this->file_lists($v . '/', $subdir, $ex, $isdir, $md5);
                 continue;
             }
             if (!empty($ex) && strtolower(substr($v, -$ex_num, $ex_num)) == $ex) {
@@ -786,7 +797,12 @@ class File
             } elseif (!empty($ex) && strtolower(substr($v, -$ex_num, $ex_num)) != $ex) {
                 unset($list[$k]);
                 continue;
+            }else{
+                $file_list[] = $v1;
             }
+
+
+
         }
         return $file_list;
     }
