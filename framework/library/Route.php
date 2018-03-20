@@ -159,12 +159,20 @@ class Route
     public function analysisVar(){
             $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI'],$count);
             $pathStr2 = str_replace($_SERVER['REQUEST_URI'], '', $_SERVER['SCRIPT_NAME'],$count2);
-            $path=@trim($pathStr,'?');
-            $path=@trim($path,'/');
-            if($count < 1 && $count2 > 0){
+            //$path=@trim($pathStr,'?');
+            $path=@trim($pathStr,'/');
+            $str=substr($path,0,1);
+
+            if($count < 1 && $count2 > 0 || $str=="&" || $str=="?"){
                 $path=[];
             }else{
                 $path = explode('/', $path);
+                foreach ($path as $k=>$v){
+                        $str=substr($v,0,1);
+                        if($str=="&" || $str=="?"){
+                            unset($path[$k]);
+                        }
+                }
             }
 
         return $path;

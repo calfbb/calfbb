@@ -14,5 +14,23 @@ return array(
     'SUFFIX_STATUS'=>true,//是否开启伪静态是加后缀
     'IDENX_SUFFIX'=>false,//APP_URL(获取完整模块url)中是否隐藏index.php false 不隐藏
     //特别说明：IDENX_SUFFIX用于支持伪静态,网站不可配置在二级目录中 如http://test.calfbbs.com/calfbbs/index.php
-
+    'TPL' => 'tpl',
+    'TPL_APP' =>
+        array (
+            'TPL_DEFAULT' => 'bootstrap',
+            'TPL_STATUS' => false,
+        ),
+    'TPL_ADDONS' =>
+        array (
+            'admin' =>
+                array (
+                    'TPL_DEFAULT' => 'bootstrap',
+                    'TPL_STATUS' => false,
+                ),
+            'api' =>
+                array (
+                    'TPL_DEFAULT' => 'bootstrap',
+                    'TPL_STATUS' => false,
+                ),
+        ),
 );
