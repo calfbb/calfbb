@@ -10,6 +10,7 @@ class Url{
     public  static $ctrl;
     public  static $action;
     public  static $module;
+    public  static $mode;
     /**
      * URL生成
      * @param string            $url 路由地址
@@ -19,7 +20,7 @@ class Url{
      * @return string
      */
     public static  function build($url,$param=[],$suffix=true){
-        $route = conf::all('route');
+
 
         // 解析路由参数
         if (is_string($url)) {
@@ -27,42 +28,48 @@ class Url{
             $url=explode('/',$url);
         }
 
-        // 解析参数
-        if (is_string($param)) {
-            $param=ltrim($param,'?');
-            parse_str($param, $param);
-        }
-
         if(!is_array($url)){
-            return   error(-1,'url参数传入错误');
+          return   error(-1,'url参数传入错误');
         }
 
-        if(!is_array($param) && $param !=""){
-            return   error(-1,'参数传入错误');
-        }
+        $route = conf::all('route');
 
-
-        //如果是伪静态模式
-        if($route['PATH_INFO']==2 || ($route['PATH_INFO']==3 && isset($_SERVER['PATH_INFO']))){
-
+        if(self::getMode($route)=="PATH_INFO"){
             $url=self::pathinfoTwo($url,$route,$param,$suffix);
-
+            $url=$url.self::buildParam($param,$suffix,$route);
         }else{
-
-            $url=self::pathinfoOne($url,$route,$param);
-
+            $url=self::pathinfoOne($url,$route,$param,$suffix);
+            $url=$url.self::buildParam($param,$suffix,$route);
         }
 
         return APP_URL.$url;
     }
 
+    /**判断请求模式
+     * @param $route
+     *
+     * @return string
+     */
+    public static function getMode($route){
+        if(!self::$mode){
+            //如果是伪静态模式
+            if($route['PATH_INFO']==2 || ($route['PATH_INFO']==3 && isset($_SERVER['PATH_INFO']))){
+
+                self::$mode="PATH_INFO";
+
+            }else{
+                self::$mode="NORMAL";
+            }
+        }
+            return self::$mode;
+    }
     /** 普通模式
      * @param $url
      * @param $route
      *
      * @return string
      */
-    public static function pathinfoOne($url,$route,$param){
+    public static function pathinfoOne($url,$route,$param,$suffix){
 
         $urlCount=count($url);
         if($urlCount ==3){
@@ -78,11 +85,8 @@ class Url{
             self::$ctrl=C;
             self::$action=@$url['a'] ? $url['a'] : $url[0];
         }
-        $str="";
-        foreach($param as $key=>$value){
-            $str.="&{$key}=$value";
-        }
-        return  "?m=".self::$module."&c=".self::$ctrl."&a=".self::$action.$str;
+
+        return  "?m=".self::$module."&c=".self::$ctrl."&a=".self::$action;
     }
 
     /**伪静态模式
@@ -108,16 +112,47 @@ class Url{
             self::$ctrl=C;
             self::$action=@$url['a'] ? $url['a'] : $url[0];
         }
+        return  "/".self::$module."/".self::$ctrl."/".self::$action;
+    }
 
-        $str="";
-        foreach($param as $key=>$value){
-            $str.="/{$key}/$value";
-        }
-        $suffixs="";
-        if($suffix && $route['SUFFIX_STATUS']){
-            $suffixs=$route['SUFFIX'];
+    /** 解析参数
+     * @param     $param
+     * @param     $route
+     * @param int $type
+     * @param     $suffix
+     *
+     * @return string
+     */
+    public static function buildParam($param,$suffix,$route=""){
+        if(!$route){
+            $route = conf::all('route');
         }
 
-        return  "/".self::$module."/".self::$ctrl."/".self::$action.$str.$suffixs;
+        // 解析参数
+        if (is_string($param)) {
+            $param=ltrim($param,'?');
+            parse_str($param, $param);
+        }
+        if(!is_array($param) && $param !=""){
+            return   error(-1,'参数传入错误');
+        }
+
+        if(self::getMode($route)=="NORMAL"){
+            $str="";
+            foreach($param as $key=>$value){
+                $str.="&{$key}=$value";
+            }
+            return  $str;
+        }else{
+            $str="";
+            foreach($param as $key=>$value){
+                $str.="/{$key}/$value";
+            }
+            $suffixs="";
+            if($suffix && $route['SUFFIX_STATUS']){
+                $suffixs=$route['SUFFIX'];
+            }
+            return  $str.$suffixs;
+        }
     }
 }

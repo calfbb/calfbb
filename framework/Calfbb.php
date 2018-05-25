@@ -74,7 +74,7 @@ class Calfbb
         include_once CORE .'functions/function.php';
 
         // 开始替换\为/
-        $this->ctrlFile = str_replace('\\', '/', $this->ctrlFile);
+         $this->ctrlFile = str_replace('\\', '/', $this->ctrlFile);
 
         if (is_file($this->ctrlFile)) {
 
@@ -229,7 +229,7 @@ class Calfbb
         $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https' : 'http';
         $indexSuffix="";
         if($request->route['IDENX_SUFFIX']==false){
-            $indexSuffix="/index.php";
+           $indexSuffix="/index.php";
         }
         define('APP_URL',$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.$indexSuffix);
         $_G['APP_URL']=APP_URL;

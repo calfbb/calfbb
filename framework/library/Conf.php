@@ -12,7 +12,7 @@ class Conf
      * @var array
      */
     static public $conf = array();
-    
+
     /**
      * 加载系统配置,如果之前已经加载过,那么就直接返回
      * @param string $name 配置名
@@ -28,14 +28,14 @@ class Conf
             $conf = CALFBB.'/data/'.$file.'.php';
             if(is_file($conf)) {
                 self::$conf[$file] = include $conf;
-                    return isset(self::$conf[$file][$name])?self::$conf[$file][$name]:false;
+                return isset(self::$conf[$file][$name])?self::$conf[$file][$name]:false;
             } else {
                 return false;
             }
         }
-        
+
     }
-    
+
     /**
      * 加载系统配置文件(直接加载整个配置文件),如果之前已经加载过,那么就直接返回
      * @param string $name 配置名
@@ -51,6 +51,7 @@ class Conf
             if(is_file($conf)) {
                 self::$conf[$file] = include $conf;
                 return self::$conf[$file];
+
             } else {
                 return false;
             }

@@ -309,102 +309,102 @@ class File
      *            图片的相对路径从attachment开始
      * @return boolean|error
      */
-    /* public  function file_remote_upload($filename, $auto_delete_local = true)
-     {
-         global $_W;
-         if (empty($_W['setting']['remote']['type'])) {
-             return false;
-         }
-         if ($_W['setting']['remote']['type'] == '1') {
-             require_once(IA_ROOT . '/framework/library/ftp/ftp.php');
-             $ftp_config = array(
-                 'hostname' => $_W['setting']['remote']['ftp']['host'],
-                 'username' => $_W['setting']['remote']['ftp']['username'],
-                 'password' => $_W['setting']['remote']['ftp']['password'],
-                 'port' => $_W['setting']['remote']['ftp']['port'],
-                 'ssl' => $_W['setting']['remote']['ftp']['ssl'],
-                 'passive' => $_W['setting']['remote']['ftp']['pasv'],
-                 'timeout' => $_W['setting']['remote']['ftp']['timeout'],
-                 'rootdir' => $_W['setting']['remote']['ftp']['dir']
-             );
-             $ftp = new Ftp($ftp_config);
-             if (true === $ftp->connect()) {
-                 $response = $ftp->upload(ATTACHMENT_ROOT . '/' . $filename, $filename);
-                 if ($auto_delete_local) {
-                     file_delete($filename);
-                 }
-                 if (!empty($response)) {
-                     return true;
-                 } else {
-                     return error(1, '远程附件上传失败，请检查配置并重新上传');
-                 }
-             } else {
-                 return error(1, '远程附件上传失败，请检查配置并重新上传');
-             }
-         } elseif ($_W['setting']['remote']['type'] == '2') {
-             require_once(IA_ROOT . '/framework/library/alioss/autoload.php');
-             load()->model('attachment');
-             $buckets = attachment_alioss_buctkets($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret']);
-             $endpoint = 'http://' . $buckets[$_W['setting']['remote']['alioss']['bucket']]['location'] . '.aliyuncs.com';
-             try {
-                 $ossClient = new \OSS\OssClient($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret'], $endpoint);
-                 $ossClient->uploadFile($_W['setting']['remote']['alioss']['bucket'], $filename, ATTACHMENT_ROOT . $filename);
-             } catch (\OSS\Core\OssException $e) {
-                 return error(1, $e->getMessage());
-             }
-             if ($auto_delete_local) {
-                 file_delete($filename);
-             }
-         } elseif ($_W['setting']['remote']['type'] == '3') {
-             require_once(IA_ROOT . '/framework/library/qiniu/autoload.php');
-             $auth = new Qiniu\Auth($_W['setting']['remote']['qiniu']['accesskey'], $_W['setting']['remote']['qiniu']['secretkey']);
-             $config = new Qiniu\Config();
-             $uploadmgr = new Qiniu\Storage\UploadManager($config);
-             // 构造上传策略，覆盖已有文件
-             $putpolicy = Qiniu\base64_urlSafeEncode(json_encode(array(
-                 'scope' => $_W['setting']['remote']['qiniu']['bucket'] . ':' . $filename
-             )));
-             $uploadtoken = $auth->uploadToken($_W['setting']['remote']['qiniu']['bucket'], $filename, 3600, $putpolicy);
-             list($ret, $err) = $uploadmgr->putFile($uploadtoken, $filename, ATTACHMENT_ROOT . '/' . $filename);
-             if ($auto_delete_local) {
-                 file_delete($filename);
-             }
-             if ($err !== null) {
-                 return error(1, '远程附件上传失败，请检查配置并重新上传');
-             } else {
-                 return true;
-             }
-         } elseif ($_W['setting']['remote']['type'] == '4') {
-             if (!empty($_W['setting']['remote']['cos']['local'])) {
-                 require(IA_ROOT . '/framework/library/cosv4.2/include.php');
-                 qcloudcos\Cosapi::setRegion($_W['setting']['remote']['cos']['local']);
-                 $uploadRet = qcloudcos\Cosapi::upload($_W['setting']['remote']['cos']['bucket'], ATTACHMENT_ROOT . $filename, '/' . $filename, '', 3 * 1024 * 1024, 0);
-             } else {
-                 require(IA_ROOT . '/framework/library/cos/include.php');
-                 $uploadRet = \Qcloud_cos\Cosapi::upload($_W['setting']['remote']['cos']['bucket'], ATTACHMENT_ROOT . $filename, '/' . $filename, '', 3 * 1024 * 1024, 0);
-             }
-             if ($uploadRet['code'] != 0) {
-                 switch ($uploadRet['code']) {
-                     case -62 :
-                         $message = '输入的appid有误';
-                         break;
-                     case -79 :
-                         $message = '输入的SecretID有误';
-                         break;
-                     case -97 :
-                         $message = '输入的SecretKEY有误';
-                         break;
-                     case -166 :
-                         $message = '输入的bucket有误';
-                         break;
-                 }
-                 return error(-1, $message);
-             }
-             if ($auto_delete_local) {
-                 file_delete($filename);
-             }
-         }
-     }*/
+   /* public  function file_remote_upload($filename, $auto_delete_local = true)
+    {
+        global $_W;
+        if (empty($_W['setting']['remote']['type'])) {
+            return false;
+        }
+        if ($_W['setting']['remote']['type'] == '1') {
+            require_once(IA_ROOT . '/framework/library/ftp/ftp.php');
+            $ftp_config = array(
+                'hostname' => $_W['setting']['remote']['ftp']['host'],
+                'username' => $_W['setting']['remote']['ftp']['username'],
+                'password' => $_W['setting']['remote']['ftp']['password'],
+                'port' => $_W['setting']['remote']['ftp']['port'],
+                'ssl' => $_W['setting']['remote']['ftp']['ssl'],
+                'passive' => $_W['setting']['remote']['ftp']['pasv'],
+                'timeout' => $_W['setting']['remote']['ftp']['timeout'],
+                'rootdir' => $_W['setting']['remote']['ftp']['dir']
+            );
+            $ftp = new Ftp($ftp_config);
+            if (true === $ftp->connect()) {
+                $response = $ftp->upload(ATTACHMENT_ROOT . '/' . $filename, $filename);
+                if ($auto_delete_local) {
+                    file_delete($filename);
+                }
+                if (!empty($response)) {
+                    return true;
+                } else {
+                    return error(1, '远程附件上传失败，请检查配置并重新上传');
+                }
+            } else {
+                return error(1, '远程附件上传失败，请检查配置并重新上传');
+            }
+        } elseif ($_W['setting']['remote']['type'] == '2') {
+            require_once(IA_ROOT . '/framework/library/alioss/autoload.php');
+            load()->model('attachment');
+            $buckets = attachment_alioss_buctkets($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret']);
+            $endpoint = 'http://' . $buckets[$_W['setting']['remote']['alioss']['bucket']]['location'] . '.aliyuncs.com';
+            try {
+                $ossClient = new \OSS\OssClient($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret'], $endpoint);
+                $ossClient->uploadFile($_W['setting']['remote']['alioss']['bucket'], $filename, ATTACHMENT_ROOT . $filename);
+            } catch (\OSS\Core\OssException $e) {
+                return error(1, $e->getMessage());
+            }
+            if ($auto_delete_local) {
+                file_delete($filename);
+            }
+        } elseif ($_W['setting']['remote']['type'] == '3') {
+            require_once(IA_ROOT . '/framework/library/qiniu/autoload.php');
+            $auth = new Qiniu\Auth($_W['setting']['remote']['qiniu']['accesskey'], $_W['setting']['remote']['qiniu']['secretkey']);
+            $config = new Qiniu\Config();
+            $uploadmgr = new Qiniu\Storage\UploadManager($config);
+            // 构造上传策略，覆盖已有文件
+            $putpolicy = Qiniu\base64_urlSafeEncode(json_encode(array(
+                'scope' => $_W['setting']['remote']['qiniu']['bucket'] . ':' . $filename
+            )));
+            $uploadtoken = $auth->uploadToken($_W['setting']['remote']['qiniu']['bucket'], $filename, 3600, $putpolicy);
+            list($ret, $err) = $uploadmgr->putFile($uploadtoken, $filename, ATTACHMENT_ROOT . '/' . $filename);
+            if ($auto_delete_local) {
+                file_delete($filename);
+            }
+            if ($err !== null) {
+                return error(1, '远程附件上传失败，请检查配置并重新上传');
+            } else {
+                return true;
+            }
+        } elseif ($_W['setting']['remote']['type'] == '4') {
+            if (!empty($_W['setting']['remote']['cos']['local'])) {
+                require(IA_ROOT . '/framework/library/cosv4.2/include.php');
+                qcloudcos\Cosapi::setRegion($_W['setting']['remote']['cos']['local']);
+                $uploadRet = qcloudcos\Cosapi::upload($_W['setting']['remote']['cos']['bucket'], ATTACHMENT_ROOT . $filename, '/' . $filename, '', 3 * 1024 * 1024, 0);
+            } else {
+                require(IA_ROOT . '/framework/library/cos/include.php');
+                $uploadRet = \Qcloud_cos\Cosapi::upload($_W['setting']['remote']['cos']['bucket'], ATTACHMENT_ROOT . $filename, '/' . $filename, '', 3 * 1024 * 1024, 0);
+            }
+            if ($uploadRet['code'] != 0) {
+                switch ($uploadRet['code']) {
+                    case -62 :
+                        $message = '输入的appid有误';
+                        break;
+                    case -79 :
+                        $message = '输入的SecretID有误';
+                        break;
+                    case -97 :
+                        $message = '输入的SecretKEY有误';
+                        break;
+                    case -166 :
+                        $message = '输入的bucket有误';
+                        break;
+                }
+                return error(-1, $message);
+            }
+            if ($auto_delete_local) {
+                file_delete($filename);
+            }
+        }
+    }*/
 
     /**
      * 获取指定某目录下指定后缀的随机文件名

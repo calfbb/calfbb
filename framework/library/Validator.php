@@ -57,7 +57,7 @@ class Validator {
             $isValid = true;
             $atIndex = strrpos($email, '@');
             if (is_bool($atIndex) && !$atIndex) {
-               $isValid = false;
+                $isValid = false;
             } else {
                 $domain = substr($email, $atIndex+1);
                 $local = substr($email, 0, $atIndex);
@@ -566,7 +566,7 @@ class Validator {
             $this->fields=['action'=>$message];
             $this->setRule(__FUNCTION__, function($val, $args) {
 
-        }, $message, array($action));
+            }, $message, array($action));
 
             $this->registerError(__FUNCTION__,'action',$message);
         }
@@ -731,7 +731,7 @@ class Validator {
                 }
             }
 
-			$this->validData[$key] = $val;
+            $this->validData[$key] = $val;
             return TRUE;
         }
     }

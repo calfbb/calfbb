@@ -76,6 +76,16 @@ function url($url,$param=[],$suffix=true){
 
 
 /**
+ * URL参数生成
+ * @param string|array      $param 参数（支持数组和字符串）a=val&b=val2... ['a'=>'val1', 'b'=>'val2']
+ * @param string|bool       $suffix 伪静态后缀，默认为true表示获取配置值
+ * @return string
+ */
+function param($param="",$suffix=true){
+    return \Framework\library\Url::buildParam($param,$suffix);
+}
+
+/**
  * 构造错误数组
  * @param int $code 错误码
  * @param string $message 错误信息
@@ -115,7 +125,7 @@ if (!function_exists('getallheaders'))
         {
             if (substr($name, 0, 5) == 'HTTP_')
             {
-                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                $headers[str_replace(' ', '-', strtoupper(str_replace('_', ' ', substr($name, 5))))] = $value;
             }
         }
         return $headers;

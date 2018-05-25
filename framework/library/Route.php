@@ -19,7 +19,6 @@ class Route
         $route = conf::all('route');
         $this->route=$route;
         $this->addons=$route['DEFAULT_ADDONS'];
-
         //如果路由是第二种模式
         if($route['PATH_INFO']==2  && !isset($_GET['m'])){
             $path=$this->analysisVar();
@@ -42,30 +41,30 @@ class Route
     public function pathinfoOne($route)
     {
         global $_G,$_GPC;
-            if(isset($_GPC['m'])){
-                $this->module=$_GPC['m'];
-            }else{
-                $this->module=conf::get('DEFAULT_MODULE', 'route');
-                $_GPC['m']=$this->module;
-                $_GET['m']=$this->module;
-            }
+        if(isset($_GPC['m'])){
+            $this->module=$_GPC['m'];
+        }else{
+            $this->module=conf::get('DEFAULT_MODULE', 'route');
+            $_GPC['m']=$this->module;
+            $_GET['m']=$this->module;
+        }
 
-            if(isset($_GPC['c'])){
-                $this->ctrl=$_GPC['c'];
-            }else{
-                $this->ctrl=conf::get('DEFAULT_CTRL', 'route');
-                $_GPC['c']=$this->ctrl;
-                $_GET['c']=$this->ctrl;
-            }
+        if(isset($_GPC['c'])){
+            $this->ctrl=$_GPC['c'];
+        }else{
+            $this->ctrl=conf::get('DEFAULT_CTRL', 'route');
+            $_GPC['c']=$this->ctrl;
+            $_GET['c']=$this->ctrl;
+        }
 
-            if(isset($_GPC['a'])){
-                $this->action=$this->delSuffix($_GPC['a']);
+        if(isset($_GPC['a'])){
+            $this->action=$this->delSuffix($_GPC['a']);
 
-            }else{
-                $this->action=$this->delSuffix(conf::get('DEFAULT_ACTION', 'route'));
-                $_GPC['a']=$this->action;
-                $_GET['a']=$this->action;
-            }
+        }else{
+            $this->action=$this->delSuffix(conf::get('DEFAULT_ACTION', 'route'));
+            $_GPC['a']=$this->action;
+            $_GET['a']=$this->action;
+        }
 
 
 
@@ -157,23 +156,35 @@ class Route
      * 解析url参数
      */
     public function analysisVar(){
-            $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI'],$count);
-            $pathStr2 = str_replace($_SERVER['REQUEST_URI'], '', $_SERVER['SCRIPT_NAME'],$count2);
-            //$path=@trim($pathStr,'?');
-            $path=@trim($pathStr,'/');
-            $str=substr($path,0,1);
+        $pathStr = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI'],$count);
+        $pathStr2 = str_replace($_SERVER['REQUEST_URI'], '', $_SERVER['SCRIPT_NAME'],$count2);
+        //$path=@trim($pathStr,'?');
+        $path=@trim($pathStr,'/');
+        $str=substr($path,0,1);
 
-            if($count < 1 && $count2 > 0 || $str=="&" || $str=="?"){
-                $path=[];
-            }else{
-                $path = explode('/', $path);
-                foreach ($path as $k=>$v){
-                        $str=substr($v,0,1);
-                        if($str=="&" || $str=="?"){
-                            unset($path[$k]);
-                        }
+        if($count < 1 && $count2 > 0 || $str=="&" || $str=="?"){
+            $path=[];
+        }else{
+            $path = explode('/', $path);
+
+            foreach ($path as $k=>$v){
+
+                $str=substr($v,0,1);
+                if($str=="&" || $str=="?"){
+                    unset($path[$k]);
+                }else{
+                    /**
+                     * 过滤参数中的？后面字符
+                     */
+                    $pos = strpos($v,"?");
+                    if($pos){
+                        $path[$k] = substr($v,0,$pos);
+                    }
                 }
+
+
             }
+        }
 
         return $path;
     }

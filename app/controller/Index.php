@@ -27,7 +27,6 @@ class Index extends User
     {
         global $_GPC,$_G;
 
-
     }
 
     /**

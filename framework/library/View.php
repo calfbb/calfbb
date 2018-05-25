@@ -31,22 +31,41 @@ trait View
          */
         $route=\Framework\library\conf::all('route');
 
+
+
         /**
          * 如果是主应用
          */
-        if(M==$route['DEFAULT_MODULE']){
+        if(M==$route['DEFAULT_MODULE'] || $module==$route['DEFAULT_MODULE']){
+            /**
+             * 修改全局变量
+             */
+            if($module !=""){
+                $this->assign['APP']=$this->assign['APP_URL']."/".$module;
+                $this->assign['_G']['APP']=$this->assign['APP_URL']."/".$module;
+            }
 
             $route['TPL_APP']['TPL_DEFAULT']=trim($route['TPL_APP']['TPL_DEFAULT']);
-            if(@$route['TPL_APP']['TPL_STATUS']==true &&  !empty($route['TPL_APP']['TPL_DEFAULT'])){//如果开启模版机制
-                $module= $module !="" ? $module  : CALFBB;
-                $module=str_replace('\\', '/', $module);
-                $module=$module .'/'.$route['TPL'].'/'.$route['DEFAULT_MODULE']."/".$route['TPL_APP']['TPL_DEFAULT']. '/';
-            }else{
-                $module= $module !="" ? $module  : APP;
-                $module=str_replace('\\', '/', $module);
-                $module=$module . 'template/';
-            }
+                if(@$route['TPL_APP']['TPL_STATUS']==true &&  !empty($route['TPL_APP']['TPL_DEFAULT'])){//如果开启模版机制
+                    $module= $module !="" ? CALFBB."/".$module."/" : CALFBB;
+
+                    $module=str_replace('\\', '/', $module);
+                    $module=$module .'/'.$route['TPL'].'/'.$route['DEFAULT_MODULE']."/".$route['TPL_APP']['TPL_DEFAULT']. '/';
+                }else{
+                    $module= $module !="" ? CALFBB."/".$module."/"   : APP;
+                    $module=str_replace('\\', '/', $module);
+                    $module=$module . 'template/';
+                }
         }else{//如果是插件应用
+
+            /**
+             * 修改全局变量
+             */
+            if($module !=""){
+                $this->assign['APP']=$this->assign['APP_URL']."/".$route['DEFAULT_ADDONS']."/".$module;
+                $this->assign['_G']['APP']=$this->assign['APP_URL']."/".$route['DEFAULT_ADDONS']."/".$module;
+            }
+
             $route['TPL_ADDONS'][M]=@$route['TPL_ADDONS'][M] ? $route['TPL_ADDONS'][M] : "";
             if(!empty($route['TPL_ADDONS'][M])){
                 $route['TPL_ADDONS'][M]['TPL_DEFAULT']=trim($route['TPL_ADDONS'][M]['TPL_DEFAULT']);
@@ -60,7 +79,7 @@ trait View
                     $module=$module . 'template/';
                 }
             }else{
-                $module= $module !="" ? $module  : APP;
+                $module= $module !="" ? CALFBB."/".$route['DEFAULT_ADDONS']."/".$module."/"  : APP;
                 $module=str_replace('\\', '/', $module);
                 $module=$module . 'template/';
             }
