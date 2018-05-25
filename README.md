@@ -55,3 +55,10 @@ project  项目部署目录
 ├─README.md  README 文件
 ├─vendor   第三方类库目录（Composer）
 :-: ~~~
+
+
+####开发注意
+由于框架改了部分composer组件中的代码,安装或更新composer时,必须加上组建名称，如：
+composer require "foo/bar:1.0.0"
+composer update symfony/yaml 
+禁止：composer update 
