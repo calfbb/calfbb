@@ -32,7 +32,13 @@ class Route
                 $this->pathinfoOne($route);
             }
 
-        }else{ //如果路由是第一种模式
+        }else if($route['PATH_INFO']==4) {//如果路由是第四种模式
+            $path=$this->analysisVar();
+            $result=$this->pathinfoFour($route,$path);
+            if($result !=true){
+                $this->pathinfoOne($route);
+            }
+        }else{//如果路由是第一种模式
             $this->pathinfoOne($route);
         }
 
@@ -152,6 +158,115 @@ class Route
         }
 
     }
+
+
+    /** 模式四 自定义路由
+     * @param $route
+     * @param $path
+     *
+     * @return bool
+     */
+    public function pathinfoFour($route,$path)
+    {
+        global $_GPC;
+        if(!empty($path)){
+            $uri=$this->delSuffix(implode('/',$path));
+
+            $array=conf::all( 'path');
+            $newArray=array_keys($array);
+            $key="";
+            $data=[];
+            foreach ($newArray as  $value){
+                if (strstr( $uri , $value ) !== false ){
+
+                    $key=$value;
+                    $val=explode("-",trim(substr($uri,strlen($value),strlen($uri)-strlen($value)),'-'));
+                    break;
+                }
+            }
+
+
+            if(!empty($key)){
+                $data=$array[$key];
+                $paramete=$this->compileParameterNames($data['paramete']);
+                $newData=[];
+                foreach ($paramete as $k=>$v){
+                    if(!empty($val[$k])){
+                        $newData[$v]=$val[$k];
+                    }
+
+                }
+                unset($data['paramete']);
+
+                $data=array_merge($data,$newData);
+                foreach ($data as $k=>$v){
+                    $_GET[$k]=$v;
+                    $_GPC[$k]=$v;
+                }
+            }
+
+        }
+
+        return false;
+
+    }
+
+
+
+
+
+
+    /**
+     * Get the parameter names for the route.
+     *
+     * @return array
+     */
+    protected function compileParameterNames($uri)
+    {
+        preg_match_all('-\{(.*?)\}-', $uri, $matches);
+
+        return array_map(function($m) { return trim($m, '?'); }, $matches[1]);
+    }
+
+//    /**
+//     * Combine a set of parameter matches with the route's keys.
+//     *
+//     * @param  array  $matches
+//     * @return array
+//     */
+//    protected function matchToKeys(array $matches)
+//    {
+//        if (count($this->parameterNames()) == 0) return array();
+//
+//        $parameters = array_intersect_key($matches, array_flip($this->parameterNames()));
+//
+//        return array_filter($parameters, function($value)
+//        {
+//            return is_string($value) && strlen($value) > 0;
+//        });
+//    }
+//
+//
+//    /**
+//     * Get the optional parameters for the route.
+//     *
+//     * @return array
+//     */
+//    protected function extractOptionalParameters()
+//    {
+//        preg_match_all('/\{(\w+?)\?\}/', $this->uri, $matches);
+//
+//        $optional = array();
+//
+//        if (isset($matches[1]))
+//        {
+//            foreach ($matches[1] as $key) { $optional[$key] = null; }
+//        }
+//
+//        return $optional;
+//    }
+
+
     /**
      * 解析url参数
      */
@@ -188,6 +303,8 @@ class Route
 
         return $path;
     }
+
+
 
     /**
      * @param      $num
