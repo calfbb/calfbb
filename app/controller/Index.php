@@ -26,7 +26,7 @@ class Index extends User
     public function test()
     {
         global $_GPC,$_G;
-
+        print_r($_GPC);
     }
 
     /**

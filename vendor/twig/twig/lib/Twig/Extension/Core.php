@@ -1091,6 +1091,11 @@ function twig_escape_filter(Twig_Environment $env, $string, $strategy = 'html', 
             if (0 == strlen($string) ? false : 1 !== preg_match('/^./su', $string)) {
                 throw new Twig_Error_Runtime('The string to escape is not a valid UTF-8 string.');
             }
+            $string = preg_replace("/<[^><]*script[^><]*>/i",'',$string);
+            $array=["onerror=","onclick=","onmouseover=","onfocus="];
+            foreach($array as $v){
+                $string = str_replace($v,'no=',$string);
+            }
 
             // $string = preg_replace_callback('#[^a-zA-Z0-9,\.\-_]#Su', '_twig_escape_html_attr_callback', $string);
 

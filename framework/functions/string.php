@@ -238,3 +238,11 @@ function isSerialized($data, $strict = true) {
     return false;
 }
 
+function  filterJsScript($string){
+    $string = preg_replace("/<[^><]*script[^><]*>/i",'',$string);
+    $array=["onerror=","onclick=","onmouseover=","onfocus="];
+    foreach($array as $v){
+        $string = str_replace($v,'no=',$string);
+
+    }
+}

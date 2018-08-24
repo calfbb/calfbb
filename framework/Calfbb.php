@@ -233,6 +233,7 @@ class Calfbb
         }
         define('APP_URL',$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.$indexSuffix);
         $_G['APP_URL']=APP_URL;
+        $_G['ROOT']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl;
         $_G['APP']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.$moduleName;
         $_G['ATTACHMENT_ROOT']=$http_type."://".$_SERVER['HTTP_HOST'].$scriptUrl.'/'.\Framework\library\conf::get('attachdir', 'file');
 

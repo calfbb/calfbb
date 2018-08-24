@@ -50,6 +50,16 @@ function http_method()
     }
 }
 
+/**
+ *@todo: 判断是否为ajax
+ */
+if(!function_exists('is_ajax')){
+    function is_ajax()
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtoupper($_SERVER['HTTP_X_REQUESTED_WITH'])=='XMLHTTPREQUEST';
+    }
+}
+
 function json($array)
 {
     header('Content-Type:application/json; charset=utf-8');

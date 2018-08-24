@@ -35,8 +35,14 @@ class Route
         }else if($route['PATH_INFO']==4) {//如果路由是第四种模式
             $path=$this->analysisVar();
             $result=$this->pathinfoFour($route,$path);
+
             if($result !=true){
-                $this->pathinfoOne($route);
+                if(!empty($path) && !isset($_GET['m'])){
+                    $this->pathinfoTwo($route,$path);
+                }else{
+                    $this->pathinfoOne($route);
+                }
+
             }
         }else{//如果路由是第一种模式
             $this->pathinfoOne($route);
@@ -177,10 +183,14 @@ class Route
             $key="";
             $data=[];
             foreach ($newArray as  $value){
-                if (strstr( $uri , $value ) !== false ){
+                $pattern = "/^{$value}.*/is";
+
+
+                if (preg_match($pattern,$uri)){
 
                     $key=$value;
                     $val=explode("-",trim(substr($uri,strlen($value),strlen($uri)-strlen($value)),'-'));
+
                     break;
                 }
             }

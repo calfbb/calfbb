@@ -26,6 +26,7 @@ trait View
         $this->assign['_GPC']=$_GPC;
         $this->assign['APP_URL']=$_G['APP_URL'];
         $this->assign['APP']=$_G['APP'];
+        $this->assign['ROOT']=$_G['ROOT'];
         /**
          * 配置路由
          */
@@ -41,8 +42,8 @@ trait View
              * 修改全局变量
              */
             if($module !=""){
-                $this->assign['APP']=$this->assign['APP_URL']."/".$module;
-                $this->assign['_G']['APP']=$this->assign['APP_URL']."/".$module;
+                $this->assign['APP']=$this->assign['ROOT']."/".$module;
+                $this->assign['_G']['APP']=$this->assign['ROOT']."/".$module;
             }
 
             $route['TPL_APP']['TPL_DEFAULT']=trim($route['TPL_APP']['TPL_DEFAULT']);
@@ -57,13 +58,12 @@ trait View
                     $module=$module . 'template/';
                 }
         }else{//如果是插件应用
-
             /**
              * 修改全局变量
              */
             if($module !=""){
-                $this->assign['APP']=$this->assign['APP_URL']."/".$route['DEFAULT_ADDONS']."/".$module;
-                $this->assign['_G']['APP']=$this->assign['APP_URL']."/".$route['DEFAULT_ADDONS']."/".$module;
+                $this->assign['APP']=$this->assign['ROOT']."/".$route['DEFAULT_ADDONS']."/".$module;
+                $this->assign['_G']['APP']=$this->assign['ROOT']."/".$route['DEFAULT_ADDONS']."/".$module;
             }
 
             $route['TPL_ADDONS'][M]=@$route['TPL_ADDONS'][M] ? $route['TPL_ADDONS'][M] : "";
