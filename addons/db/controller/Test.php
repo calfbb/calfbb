@@ -8,10 +8,9 @@
 namespace Addons\db\controller;
 
 use  Framework\library\View;
-use  Addons\db\model\User;
 use  Framework\library\Cache;
 use  Framework\library\Log;
-class Index extends  User
+class Test
 {
     use View;
     /**
@@ -24,7 +23,7 @@ class Index extends  User
      * @return string
      */
     public function index(){
-            global $_G;
+        global $_G;
 
         $this->display('index/index');
     }
@@ -34,11 +33,11 @@ class Index extends  User
         $cache=new Cache();
         $cache->set(123,123);
         echo $cache->get(123);
-//        $cache->del(123);
-//        echo $cache->get(123);
-//        $cache->set(123,123);
-//        $cache->clear();
-//        echo $cache->get(123);
+        $cache->del(123);
+        echo $cache->get(123);
+        $cache->set(123,123);
+        $cache->clear();
+        echo $cache->get(123);
     }
 
     public function testLog(){
@@ -59,11 +58,11 @@ class Index extends  User
      * @return string | bool  响应用户名
      */
     public function getUserName($uid,$status=true){
-            if($uid==66 && $status==true){
-                return $this->userName;
-            }else{
-                return false;
-            }
+        if($uid==66 && $status==true){
+            return $this->userName;
+        }else{
+            return false;
+        }
     }
 
 

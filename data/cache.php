@@ -8,7 +8,7 @@ return array(
 
    'CACHE_TYPE'=>'File',
    'OPTION'=> [
-       'path'=>CALFBB.'/data/log/cache',//储存位置
+       'path'=>CALFBB.'/data/cache/cache',//储存位置
        'time'=>3600,//超时时间
    ]
    /**
