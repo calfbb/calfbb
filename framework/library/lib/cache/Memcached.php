@@ -12,9 +12,11 @@ class Memcached
 
         $this->mem->setOption(\Memcached::OPT_COMPRESSION, false); //关闭压缩功能
         $this->mem->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);//使用binary二进制协议
-        $ret = $this->mem->addServers($option['servers']);
-        if (!$ret) {
-            \Framework\library\log::alert($this->mem->getResultMessage());
+
+        try{
+            $this->mem->addServers($option['servers']);
+        } catch (Exception $e) {
+            \Framework\library\log::alert( json_encode(array($e->getCode(), $e->getFile(), $e->getLine(), $e->getMessage())));
         }
     }
 

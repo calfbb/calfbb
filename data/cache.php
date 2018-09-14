@@ -1,17 +1,19 @@
 <?php
-//日志相关配置
+//缓存相关配置
 return array(
 
    /**
-     * file 存储
+     * file 缓存
      */
 
    'CACHE_TYPE'=>'File',
    'OPTION'=> [
-       'path'=>CALFBB.'/log/cache',//储存位置
+       'path'=>CALFBB.'/data/log/cache',//储存位置
        'time'=>3600,//超时时间
    ]
-       
+   /**
+    * Memcached 缓存
+    */
 //    'CACHE_TYPE'=>'memcached',
 //    'OPTION'=> [
 //        'servers'=>[
@@ -19,4 +21,19 @@ return array(
 //','11211']
 //        ]
 //    ]
+
+
+   /**
+    * Redis 缓存
+    */
+   //     'CACHE_TYPE'=>'redis',
+//       'OPTION'=> [
+//           'servers'=>
+//               '192.168.167.129'
+//           ,
+//           'port'=>
+//               '6379',
+//           'password'=>"123456"
+//
+//       ]
 );
